@@ -1,0 +1,4 @@
+name: MobEggs
+version: '${project.version}'
+main: de.tomstahlberg.mobeggs.MobEggs
+api-version: 1.20
