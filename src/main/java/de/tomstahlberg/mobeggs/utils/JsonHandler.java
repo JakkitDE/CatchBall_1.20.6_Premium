@@ -3,11 +3,16 @@ package de.tomstahlberg.mobeggs.utils;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.persistence.PersistentDataHolder;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -18,6 +23,7 @@ import org.json.JSONObject;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Collection;
+import java.util.Set;
 
 public class JsonHandler {
     public static JSONObject serializeLivingEntity(LivingEntity entity) {
@@ -33,6 +39,15 @@ public class JsonHandler {
         json.put("is_glowing", entity.isGlowing());
         json.put("is_silent", entity.isSilent());
         json.put("is_swimming", entity.isSwimming());
+
+        if(!(entity.getPersistentDataContainer().isEmpty())){
+            JSONObject pdc = new JSONObject();
+            Set<NamespacedKey> keys = entity.getPersistentDataContainer().getKeys();
+            for(NamespacedKey key : keys){
+                pdc.put(key.getKey(), entity.getPersistentDataContainer().get(key, PersistentDataType.STRING));
+            }
+            json.put("pdc", pdc);
+        }
 
         /*// Location
         JSONObject locationJson = new JSONObject();
@@ -66,7 +81,7 @@ public class JsonHandler {
         return json;
     }
 
-    public static LivingEntity deserializeLivingEntity(JSONObject json, Location location, World world) {
+    public static LivingEntity deserializeLivingEntity(JSONObject json, Location location, World world, Plugin plugin) {
         // Assuming you have some way to get the living entity type from the JSON
         LivingEntity entity = (LivingEntity) world.spawnEntity(location, EntityType.valueOf((String) json.get("type")));
 
@@ -93,11 +108,11 @@ public class JsonHandler {
         entity.teleport(location);*/
 
         // Velocity
-        JSONObject velocityJson = (JSONObject) json.get("velocity");
+        //JSONObject velocityJson = (JSONObject) json.get("velocity");
 
-        double velX;
-        double velY;
-        double velZ;
+        //double velX;
+        //double velY;
+        //double velZ;
 
 
         //double velX = (double) velocityJson.get("x");
@@ -115,6 +130,16 @@ public class JsonHandler {
             int amplifier = ((Long) effectJson.get("amplifier")).intValue();
             entity.addPotionEffect(new PotionEffect(type, duration, amplifier));
         }
+
+        if(json.has("pdc")){
+            JSONObject pdc = json.getJSONObject("pdc");
+            for(String key : pdc.keySet()){
+                String value = pdc.getString(key);
+                NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
+                entity.getPersistentDataContainer().set(namespacedKey, PersistentDataType.STRING, value);
+            }
+        }
+
 
         // Add more attributes as needed
 

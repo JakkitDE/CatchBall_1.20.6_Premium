@@ -6,6 +6,7 @@ import de.tomstahlberg.mobeggs.utils.JsonHandler;
 import de.tomstahlberg.mobeggs.utils.MobEggCreator;
 import de.tomstahlberg.mobeggs.utils.StringChecker;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import org.json.JSONObject;
 
 public class InteractEntity implements Listener {
@@ -24,10 +26,25 @@ public class InteractEntity implements Listener {
         Player player = event.getPlayer();
         if(!(event.getRightClicked() instanceof LivingEntity))
             return;
+
+
+
         if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
             return;
         if(!(StringChecker.containsFireCharge(player.getInventory().getItemInMainHand().getType().toString())))
             return;
+
+
+        /*  Test START  */
+        NamespacedKey namespacedKey = new NamespacedKey(MobEggs.plugin,"catchedOnce");
+        if(event.getRightClicked().getPersistentDataContainer().has(namespacedKey)){
+            player.sendMessage("§6§lGolden§3&lSky §8x §2Bereits einmal platziert (String).");
+
+        }
+
+        /*  Test END  */
+
+
         JSONObject jsonObject = JsonHandler.serializeLivingEntity((LivingEntity) event.getRightClicked());
 
         MobEggCreator mobEggCreator = new MobEggCreator(jsonObject, player.getInventory().getItemInMainHand(), MobEggs.plugin);

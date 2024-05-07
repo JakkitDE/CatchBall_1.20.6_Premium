@@ -37,7 +37,7 @@ public class InteractEvent implements Listener {
             player.sendMessage(jsonObject.toString());
 
             Location location = new Location(player.getLocation().getWorld(),event.getClickedBlock().getX(), event.getClickedBlock().getY()+1.0, event.getClickedBlock().getZ());
-            JsonHandler.deserializeLivingEntity(jsonObject, location, player.getLocation().getWorld());
+            JsonHandler.deserializeLivingEntity(jsonObject, location, player.getLocation().getWorld(), MobEggs.plugin);
 
             InventoryHandler.removeOneItem(player.getInventory().getItemInMainHand());
             //
