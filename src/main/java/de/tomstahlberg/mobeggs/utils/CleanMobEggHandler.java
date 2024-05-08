@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,5 +51,11 @@ public class CleanMobEggHandler {
     }
     public static boolean isMobEggItem(ItemStack itemStack){
         return PDCHandler.hasPDCString(MobEggs.plugin, itemStack, "MobEggType");
+    }
+    public static boolean isMultiMobEggItem(Plugin plugin, ItemStack itemStack){
+        if(PDCHandler.getPDCString(plugin,itemStack, "MobEggType").equalsIgnoreCase("Multi")){
+            return true;
+        }
+        return false;
     }
 }

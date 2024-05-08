@@ -1,10 +1,7 @@
 package de.tomstahlberg.mobeggs.events;
 
 import de.tomstahlberg.mobeggs.MobEggs;
-import de.tomstahlberg.mobeggs.utils.InventoryHandler;
-import de.tomstahlberg.mobeggs.utils.JsonHandler;
-import de.tomstahlberg.mobeggs.utils.PDCHandler;
-import de.tomstahlberg.mobeggs.utils.StringChecker;
+import de.tomstahlberg.mobeggs.utils.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -45,7 +42,13 @@ public class InteractEvent implements Listener {
                 entity.getPersistentDataContainer().readFromBytes(bytes);
             }
 
-            InventoryHandler.removeOneItem(player.getInventory().getItemInMainHand());
+            /* Check if item is single or multi */
+            if(CleanMobEggHandler.isMultiMobEggItem(MobEggs.plugin, player.getInventory().getItemInMainHand())){
+                InventoryHandler.removeOneItem(player.getInventory().getItemInMainHand());
+                player.getInventory().addItem(CleanMobEggHandler.getMultiMobEggItem(1));
+            }else{
+                InventoryHandler.removeOneItem(player.getInventory().getItemInMainHand());
+            }
             //
             player.sendMessage("§6§lGolden§3&lSky §8x §2Du hast ein Mob freigelassen.");
             event.setCancelled(true);
