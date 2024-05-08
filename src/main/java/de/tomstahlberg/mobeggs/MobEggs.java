@@ -9,7 +9,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MobEggs extends JavaPlugin {
     public static Plugin plugin;
-
+    /*
+    * TODO
+    * Fangball prüfen ob einweg oder mehrweg, beim Platzieren dann leeres Mehrweg bekommen oder
+    * Einweg nehmen,
+    *
+    * Gefüllten Fangball DisplayName und Lore anpassen
+    * */
     @Override
     public void onEnable() {
         // Plugin startup logic
