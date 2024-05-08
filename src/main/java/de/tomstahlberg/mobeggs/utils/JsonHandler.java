@@ -1,14 +1,10 @@
 package de.tomstahlberg.mobeggs.utils;
 
 import com.google.gson.JsonParser;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataHolder;
@@ -43,7 +39,16 @@ public class JsonHandler {
         json.put("is_dead", entity.isDead());
         json.put("is_glowing", entity.isGlowing());
         json.put("is_silent", entity.isSilent());
-        json.put("is_swimming", entity.isSwimming());
+
+        if(entity instanceof Ageable){
+            Ageable ageable = (Ageable) entity;
+            json.put("is_adult", ageable.isAdult());
+        }
+        if(entity instanceof Sheep){
+            Sheep sheep = (Sheep) entity;
+            json.put("sheep_color", sheep.getColor().toString());
+            json.put("sheep_sheared", sheep.isSheared());
+        }
 
 
         // Velocity
@@ -87,7 +92,20 @@ public class JsonHandler {
         }
         entity.setGlowing((boolean) json.get("is_glowing"));
         entity.setSilent((boolean) json.get("is_silent"));
-        entity.setSwimming((boolean) json.get("is_swimming"));
+
+        if(json.has("is_adult")){
+            Ageable ageable = (Ageable) entity;
+            if(json.getBoolean("is_adult")){
+                ageable.setAdult();
+            }else{
+                ageable.setBaby();
+            }
+        }
+        if(json.has("sheep_color")){
+            Sheep sheep = (Sheep) entity;
+            sheep.setColor(DyeColor.valueOf(json.getString("sheep_color")));
+            sheep.setSheared(json.getBoolean("sheep_sheared"));
+        }
 
         // Potion effects
         JSONArray effectsJson = (JSONArray) json.get("potion_effects");
