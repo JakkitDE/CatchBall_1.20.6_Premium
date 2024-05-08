@@ -1,0 +1,54 @@
+package de.tomstahlberg.mobeggs.utils;
+
+import de.tomstahlberg.mobeggs.MobEggs;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import org.bukkit.Material;
+import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CleanMobEggHandler {
+
+    public static ItemStack getSingleMobEggItem(int amount){
+        ItemStack itemStack = new ItemStack(Material.MAGMA_CREAM);
+        itemStack.setAmount(amount);
+        PDCHandler.setPDCString(MobEggs.plugin, itemStack, "MobEggType", "Single");
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        Component textComponent = Component.text("§3§lFangball §7(§2Einweg§7)");
+        itemMeta.displayName(textComponent);
+
+        List<Component> components = new ArrayList<>();
+        components.add(Component.text("§2Verwende ihn mit Bedacht, du kannst"));
+        components.add(Component.text("§2ihn nur einmalig verwenden, um ein Mob"));
+        components.add(Component.text("§2einzufangen."));
+        itemMeta.lore(components);
+
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
+    }
+
+    public static ItemStack getMultiMobEggItem(int amount){
+        ItemStack itemStack = new ItemStack(Material.MAGMA_CREAM);
+        itemStack.setAmount(amount);
+        PDCHandler.setPDCString(MobEggs.plugin, itemStack, "MobEggType", "Multi");
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        Component textComponent = Component.text("§3§lFangball §7(§6Mehrweg§7)");
+        itemMeta.displayName(textComponent);
+
+        List<Component> components = new ArrayList<>();
+        components.add(Component.text("§2Verwende ihn ganz nach eigenem Belieben. Du kannst"));
+        components.add(Component.text("§2ihn so oft verwenden, wie du willst, um ein Mob"));
+        components.add(Component.text("§2einzufangen."));
+        itemMeta.lore(components);
+
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
+    }
+    public static boolean isMobEggItem(ItemStack itemStack){
+        return PDCHandler.hasPDCString(MobEggs.plugin, itemStack, "MobEggType");
+    }
+}

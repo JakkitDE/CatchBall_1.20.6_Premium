@@ -18,9 +18,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public class InteractEntity implements Listener {
     @EventHandler
-    public void onInteract(PlayerInteractAtEntityEvent event){
+    public void onInteract(PlayerInteractAtEntityEvent event) throws IOException {
         if(!(event.getHand() == EquipmentSlot.OFF_HAND))
             return;
         Player player = event.getPlayer();
@@ -35,19 +37,9 @@ public class InteractEntity implements Listener {
             return;
 
 
-        /*  Test START  */
-        NamespacedKey namespacedKey = new NamespacedKey(MobEggs.plugin,"catchedOnce");
-        if(event.getRightClicked().getPersistentDataContainer().has(namespacedKey)){
-            player.sendMessage("§6§lGolden§3&lSky §8x §2Bereits einmal platziert (String).");
-
-        }
-
-        /*  Test END  */
-
-
         JSONObject jsonObject = JsonHandler.serializeLivingEntity((LivingEntity) event.getRightClicked());
 
-        MobEggCreator mobEggCreator = new MobEggCreator(jsonObject, player.getInventory().getItemInMainHand(), MobEggs.plugin);
+        MobEggCreator mobEggCreator = new MobEggCreator(jsonObject, player.getInventory().getItemInMainHand(), MobEggs.plugin, event.getRightClicked().getPersistentDataContainer());
         ItemStack mobEggItem = mobEggCreator.getMobbEggItem();
         InventoryHandler.removeOneItem(player.getInventory().getItemInMainHand());
         player.getInventory().addItem(mobEggItem);

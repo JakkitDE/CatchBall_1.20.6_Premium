@@ -2,6 +2,6 @@ package de.tomstahlberg.mobeggs.utils;
 
 public class StringChecker {
     public static boolean containsFireCharge(String input){
-        return input.contains("FIRE_CHARGE");
+        return input.contains("MAGMA_CREAM");
     }
 }

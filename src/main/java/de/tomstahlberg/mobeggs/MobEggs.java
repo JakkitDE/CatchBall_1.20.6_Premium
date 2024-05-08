@@ -1,5 +1,7 @@
 package de.tomstahlberg.mobeggs;
 
+import de.tomstahlberg.mobeggs.commands.CommandsMain;
+import de.tomstahlberg.mobeggs.commands.CommandsMainTabCompleter;
 import de.tomstahlberg.mobeggs.events.InteractEntity;
 import de.tomstahlberg.mobeggs.events.InteractEvent;
 import org.bukkit.plugin.Plugin;
@@ -14,6 +16,9 @@ public final class MobEggs extends JavaPlugin {
         plugin = this;
         getServer().getPluginManager().registerEvents(new InteractEvent(), this);
         getServer().getPluginManager().registerEvents(new InteractEntity(), this);
+
+        getServer().getPluginCommand("fangball").setExecutor(new CommandsMain());
+        getServer().getPluginCommand("fangball").setTabCompleter(new CommandsMainTabCompleter());
     }
 
     @Override

@@ -7,6 +7,7 @@ import de.tomstahlberg.mobeggs.utils.PDCHandler;
 import de.tomstahlberg.mobeggs.utils.StringChecker;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,9 +19,11 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.json.JSONObject;
 
+import java.io.IOException;
+
 public class InteractEvent implements Listener {
     @EventHandler
-    public void playerInteract(PlayerInteractEvent event){
+    public void playerInteract(PlayerInteractEvent event) throws IOException {
         Player player = event.getPlayer();
         if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
             if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
@@ -34,14 +37,17 @@ public class InteractEvent implements Listener {
             //Mob platzieren
             String jsonString = PDCHandler.getPDCString(MobEggs.plugin, player.getInventory().getItemInMainHand(), "mobdata");
             JSONObject jsonObject = JsonHandler.parseJSONObject(jsonString);
-            player.sendMessage(jsonObject.toString());
 
             Location location = new Location(player.getLocation().getWorld(),event.getClickedBlock().getX(), event.getClickedBlock().getY()+1.0, event.getClickedBlock().getZ());
-            JsonHandler.deserializeLivingEntity(jsonObject, location, player.getLocation().getWorld(), MobEggs.plugin);
+            LivingEntity entity = JsonHandler.deserializeLivingEntity(jsonObject, location, player.getLocation().getWorld(), MobEggs.plugin);
+            if(PDCHandler.hasPDCBytes(MobEggs.plugin, player.getInventory().getItemInMainHand(), "pdc")){
+                byte[] bytes = PDCHandler.getPDCBytes(MobEggs.plugin, player.getInventory().getItemInMainHand(), "pdc");
+                entity.getPersistentDataContainer().readFromBytes(bytes);
+            }
 
             InventoryHandler.removeOneItem(player.getInventory().getItemInMainHand());
             //
-            player.sendMessage("§6§lGolden§3&lSky §8x §2Du hast ein SafariNetz platziert.");
+            player.sendMessage("§6§lGolden§3&lSky §8x §2Du hast ein Mob freigelassen.");
             event.setCancelled(true);
         }
     }
