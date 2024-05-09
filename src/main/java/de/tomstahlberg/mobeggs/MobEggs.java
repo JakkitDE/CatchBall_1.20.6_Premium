@@ -15,6 +15,8 @@ public final class MobEggs extends JavaPlugin {
     * Einweg nehmen,
     *
     * Gefüllten Fangball DisplayName und Lore anpassen
+    *
+    * Wenn man ein Mob platziert, dann sicherstellen, das das neue Item clear ist..
     * */
     @Override
     public void onEnable() {

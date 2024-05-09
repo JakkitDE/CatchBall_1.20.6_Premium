@@ -33,7 +33,8 @@ public class JsonHandler {
         // Basic properties
         json.put("type", entity.getType().name());
         json.put("uuid", entity.getUniqueId().toString());
-        json.put("display_name", entity.getCustomName());
+        //json.put("display_name", entity.getCustomName()); @deprecated
+        json.put("display_name", ComponentHandler.getDisplayName(entity));
         json.put("health", entity.getHealth());
         json.put("is_dead", entity.isDead());
         json.put("is_glowing", entity.isGlowing());
@@ -122,7 +123,8 @@ public class JsonHandler {
         // Basic properties
         entity.setHealth((int) json.get("health"));
         if(json.has("display_name")){
-            entity.setCustomName((String) json.get("display_name"));
+            //entity.setCustomName((String) json.get("display_name")); @deprecated
+            ComponentHandler.setDisplayName(entity, json.getString("display_name"));
         }
         entity.setGlowing((boolean) json.get("is_glowing"));
         entity.setSilent((boolean) json.get("is_silent"));

@@ -2,7 +2,9 @@ package de.tomstahlberg.mobeggs.utils;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -17,6 +19,16 @@ public class ComponentHandler {
         Component component = Component.text(message);
         itemMeta.displayName(component);
         itemStack.setItemMeta(itemMeta);
+    }
+    public static void setDisplayName(Entity entity, String message){
+        Component component = Component.text(message);
+        entity.customName(component);
+    }
+    public static String getDisplayName(Entity entity){
+        return PlainTextComponentSerializer.plainText().serializeOrNull(entity.customName());
+    }
+    public static String getDisplayName(ItemStack itemStack){
+        return PlainTextComponentSerializer.plainText().serializeOrNull(itemStack.getItemMeta().displayName());
     }
     public static void setLore(ItemStack itemStack, List<String> loreList){
         List<Component> components = new ArrayList<>();
