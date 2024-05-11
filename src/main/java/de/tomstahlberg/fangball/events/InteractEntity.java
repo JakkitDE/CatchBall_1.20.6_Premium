@@ -3,7 +3,9 @@ package de.tomstahlberg.fangball.events;
 import de.tomstahlberg.fangball.FangBall;
 import de.tomstahlberg.fangball.utils.*;
 import net.minecraft.world.Container;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftDonkey;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventory;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftSaddledInventory;
@@ -22,22 +24,15 @@ public class InteractEntity implements Listener {
     @EventHandler
     public void onInteract(PlayerInteractAtEntityEvent event) throws IOException {
         Player player = event.getPlayer();
-        //player.sendMessage("1");
-        /*if(!(event.getHand() == EquipmentSlot.OFF_HAND))
-            return;*/
-        //player.sendMessage("2");
         if(!(event.getRightClicked() instanceof LivingEntity))
             return;
-        //player.sendMessage("3");
-
+        if(event.getHand() == EquipmentSlot.OFF_HAND)
+            return;
 
         if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
             return;
         ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
-        //player.sendMessage("4");
-        //if(!(StringChecker.containsFireCharge(player.getInventory().getItemInMainHand().getType().toString())))
-            //return;
-        //player.sendMessage("5");
+
 
         if(CleanMobEggHandler.isMobEggItem(itemStack)){
             if(CleanMobEggHandler.isFilledMobEggItem(itemStack)){
@@ -47,15 +42,26 @@ public class InteractEntity implements Listener {
                 JSONObject jsonObject = JsonHandler.serializeLivingEntity((LivingEntity) event.getRightClicked());
 
                 MobEggCreator mobEggCreator = new MobEggCreator(jsonObject, player.getInventory().getItemInMainHand(), FangBall.plugin, event.getRightClicked().getPersistentDataContainer());
-                ItemStack mobEggItem = mobEggCreator.getMobbEggItem();
+                ItemStack mobEggItem = mobEggCreator.getMobEggItem();
                 InventoryHandler.removeOneItem(player.getInventory().getItemInMainHand());
-                player.getInventory().addItem(mobEggItem);
+                //player.getInventory().addItem(mobEggItem);
+                handleItemGive(player, mobEggItem);
 
                 event.getRightClicked().remove();
                 player.sendMessage("§6§lGolden§3§lSky §8x §2Du hast ein Mob eingefangen.");
                 event.setCancelled(true);
             }
         }
+    }
+
+    public void handleItemGive(Player player, ItemStack itemStack){
+        Bukkit.getScheduler().runTaskLater(FangBall.plugin, new Runnable() {
+            @Override
+            public void run() {
+                player.getInventory().addItem(itemStack);
+                player.playSound(player.getLocation(), Sound.ENTITY_TURTLE_EGG_CRACK, 1.0f, 1.0f);
+            }
+        }, 1);
     }
 
 }

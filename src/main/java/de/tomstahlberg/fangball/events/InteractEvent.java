@@ -2,6 +2,7 @@ package de.tomstahlberg.fangball.events;
 
 import de.tomstahlberg.fangball.FangBall;
 import de.tomstahlberg.fangball.utils.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -11,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -26,7 +28,8 @@ public class InteractEvent implements Listener {
                 return;
             if(!(PDCHandler.hasPDCString(FangBall.plugin,event.getPlayer().getInventory().getItemInMainHand(), "mobdata")))
                 return;
-
+            if(event.getHand() == EquipmentSlot.OFF_HAND)
+                return;
             //
             //Mob platzieren
             String jsonString = PDCHandler.getPDCString(FangBall.plugin, player.getInventory().getItemInMainHand(), "mobdata");

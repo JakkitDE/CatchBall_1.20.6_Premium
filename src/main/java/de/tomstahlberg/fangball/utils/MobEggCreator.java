@@ -1,5 +1,8 @@
 package de.tomstahlberg.fangball.utils;
 
+import com.sun.jna.platform.win32.Sspi;
+import de.tomstahlberg.fangball.FangBall;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
@@ -45,9 +48,8 @@ public class MobEggCreator {
         }
         itemStack.setAmount(1);
         this.mobbEggItem = itemStack;
-
     }
-    public ItemStack getMobbEggItem(){
+    public ItemStack getMobEggItem(){
         return this.mobbEggItem;
     }
 }
