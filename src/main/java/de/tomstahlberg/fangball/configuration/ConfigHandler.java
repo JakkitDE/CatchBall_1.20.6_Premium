@@ -39,6 +39,7 @@ public class ConfigHandler {
         yamlConfiguration.set("","# See documentation https://blablub.de/blablub");
         yamlConfiguration.set("sounds.catchSound","ENTITY_TURTLE_EGG_CRACK");
         yamlConfiguration.set("sounds.releaseSound","BLOCK_BREWING_STAND_BREW");
+        yamlConfiguration.set("sounds.noPermissionSound", "ENTITY_VILLAGER_NO");
         yamlConfiguration.set("hooks.SuperiorSkyBlock2",false);
         yamlConfiguration.set("hooks.SuperiorSkyBlock2.onlyUseOnIslandIfAllowed",false);
 
@@ -61,6 +62,8 @@ public class ConfigHandler {
         yamlConfiguration.set("messages.mobCatched","§6§lGolden§3§lSky §8x §2Du hast ein Mob eingefangen.");
         yamlConfiguration.set("messages.mobReleased","§6§lGolden§3§lSky §8x §2Du hast ein Mob freigelassen.");
         yamlConfiguration.set("messages.alreadyHasMob","§6§lGolden§3§lSky §8x §7Der FangBall hat bereits ein Mob.");
+        yamlConfiguration.set("messages.notInAllowedWorld","§6§lGolden§3§lSky §8x §7In dieser Welt darfst du keine Fangbälle benutzen.");
+        yamlConfiguration.set("messages.noPermissionOnIsland","§6§lGolden§3§lSky §8x §7Auf dieser Insel darfs du keine Fangbälle benutzen.");
         this.language = yamlConfiguration;
         yamlConfiguration.save(this.languageFile);
     }
@@ -86,6 +89,17 @@ public class ConfigHandler {
             return true;
         }
     }
+    public boolean noPermissionSoundEnabled(){
+        if(this.configuration.getString("sounds.noPermissionSound").equalsIgnoreCase("") ||
+                this.configuration.getString("sounds.noPermissionSound").equalsIgnoreCase("null") ||
+                this.configuration.getString("sounds.noPermissionSound").equalsIgnoreCase("false") ||
+                this.configuration.get("sounds.noPermissionSound") == null
+        ){
+            return false;
+        }else{
+            return true;
+        }
+    }
     public Sound getCatchSound(){
         try {
             return Sound.valueOf(this.configuration.getString("sounds.catchSound"));
@@ -99,6 +113,14 @@ public class ConfigHandler {
             return Sound.valueOf(this.configuration.getString("sounds.releaseSound"));
         }catch (Exception e){
             Bukkit.getServer().getConsoleSender().sendMessage("§cFangBall -> Configured Release-Sound "+this.configuration.getString("sounds.releaseSound")+" doesnt exist.");
+            return null;
+        }
+    }
+    public Sound getNoPermissionSound(){
+        try {
+            return Sound.valueOf(this.configuration.getString("sounds.noPermissionSound"));
+        }catch (Exception e){
+            Bukkit.getServer().getConsoleSender().sendMessage("§cFangBall -> Configured No-Permission-Sound "+this.configuration.getString("sounds.catchSound")+" doesnt exist.");
             return null;
         }
     }
@@ -123,5 +145,11 @@ public class ConfigHandler {
     }
     public String getAlreadyFilledMessage(){
         return this.language.getString("prefix")+this.language.getString("messages.alreadyHasMob");
+    }
+    public String getNotAllowedWorldMessage(){
+        return this.language.getString("prefix")+this.language.getString("messages.notInAllowedWorld");
+    }
+    public String getNoPermissionOnIslandMessage(){
+        return this.language.getString("prefix")+this.language.getString("messages.noPermissionOnIsland");
     }
 }
