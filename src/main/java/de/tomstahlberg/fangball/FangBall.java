@@ -3,6 +3,7 @@ package de.tomstahlberg.fangball;
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblock;
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.hooks.PermissionsProvider;
+import com.bgsoftware.superiorskyblock.api.island.IslandPrivilege;
 import de.tomstahlberg.fangball.commands.CommandsMain;
 import de.tomstahlberg.fangball.commands.CommandsMainTabCompleter;
 import de.tomstahlberg.fangball.configuration.ConfigHandler;
@@ -18,12 +19,9 @@ import java.io.IOException;
 public final class FangBall extends JavaPlugin {
     public static Plugin plugin;
     public static ConfigHandler configHandler;
+    public static IslandPrivilege fangballUsePermission;
     /*
     * TODO
-    * Fangball prüfen ob einweg oder mehrweg, beim Platzieren dann leeres Mehrweg bekommen oder
-    * Einweg nehmen,
-    *
-    * Gefüllten Fangball DisplayName und Lore anpassen
     *
     * Wenn man ein Mob platziert, dann sicherstellen, das das neue Item clear ist..
     * */
@@ -36,13 +34,6 @@ public final class FangBall extends JavaPlugin {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-        getServer().getPluginManager().registerEvents(new InteractEvent(), this);
-        getServer().getPluginManager().registerEvents(new InteractEntity(), this);
-
-        getServer().getPluginCommand("fangball").setExecutor(new CommandsMain());
-        getServer().getPluginCommand("fangball").setTabCompleter(new CommandsMainTabCompleter());
-
         if(configHandler.isSuperiorSkyBlockHookEnabled()){
             if(Bukkit.getServer().getPluginManager().getPlugin("SuperiorSkyblock2") == null){
                 Bukkit.getServer().getConsoleSender().sendMessage("§cFangBall -> SuperiorSkyblock2 Hook enabled, but is not installed. Disabling hook for current session....");
@@ -50,8 +41,14 @@ public final class FangBall extends JavaPlugin {
             }else{
                 Bukkit.getServer().getConsoleSender().sendMessage("§2FangBall -> SuperiorSkyblock2 Hook enabled and plugin found.");
                 getServer().getPluginManager().registerEvents(new RegisterPermissions(), this);
+                fangballUsePermission = IslandPrivilege.getByName("fangball");
             }
         }
+        getServer().getPluginManager().registerEvents(new InteractEvent(), this);
+        getServer().getPluginManager().registerEvents(new InteractEntity(), this);
+
+        getServer().getPluginCommand("fangball").setExecutor(new CommandsMain());
+        getServer().getPluginCommand("fangball").setTabCompleter(new CommandsMainTabCompleter());
     }
 
     @Override

@@ -60,6 +60,7 @@ public class ConfigHandler {
         yamlConfiguration.set("messages.alreadyHasMob","§7This fangball already has a mob.");
         yamlConfiguration.set("messages.notInAllowedWorld","§7You are not allowed to use fangballs in this world.");
         yamlConfiguration.set("messages.noPermissionOnIsland","§7You are not allowed to use fangballs on this island.");
+        yamlConfiguration.set("messages.noPermission","§7You are not allowed to use fangballs.");
         this.language = yamlConfiguration;
         yamlConfiguration.save(this.languageFile);
     }
@@ -147,6 +148,9 @@ public class ConfigHandler {
     }
     public String getNoPermissionOnIslandMessage(){
         return this.language.getString("prefix")+this.language.getString("messages.noPermissionOnIsland");
+    }
+    public String getNoPermissionMessage(){
+        return this.language.getString("prefix")+this.language.getString("messages.noPermission");
     }
     public void disableSuperiorSkyblockHook(){
         this.configuration.set("hooks.SuperiorSkyBlock2.enabled",false);
