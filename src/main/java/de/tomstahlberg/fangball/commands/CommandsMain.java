@@ -46,11 +46,6 @@ public class CommandsMain implements CommandExecutor {
                     }
                 }
             }else{
-                if(strings[0].equalsIgnoreCase("spawn")){
-                    Player player = (Player) commandSender;
-                    LivingEntity entity = (LivingEntity) player.getLocation().getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE);
-                    entity.getEquipment().setItemInOffHand(new ItemStack(Material.DIAMOND_HOE));
-                }
                 showHelp(commandSender);
             }
         }
