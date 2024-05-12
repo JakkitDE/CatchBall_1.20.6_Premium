@@ -1,16 +1,11 @@
 package de.tomstahlberg.fangball.utils;
 
-import com.mojang.authlib.minecraft.client.ObjectMapper;
 import de.tomstahlberg.fangball.FangBall;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Saddleable;
-import net.minecraft.world.entity.animal.Animal;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.craftbukkit.v1_20_R3.CraftServer;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -22,25 +17,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class JsonHandler {
     public static JSONObject serializeLivingEntity(LivingEntity entity) throws IOException {
+        // Create new JSON
         JSONObject json = new JSONObject();
 
-        // Basic properties
+        // Some basic properties
         json.put("type", entity.getType().name());
         json.put("uuid", entity.getUniqueId().toString());
 
+        // If entity is tamed
         if(entity instanceof Tameable){
             if(((Tameable) entity).isTamed()){
                 json.put("is_tamed", true);
             }
         }
 
+        // If Entity has inventory (e.g. donkey)
         if(entity instanceof ChestedHorse){
             if(((ChestedHorse) entity).isCarryingChest()){
                 List<byte[]> itemsList = new ArrayList<>();
@@ -69,6 +64,8 @@ public class JsonHandler {
                 }
             }
         }
+
+        // If entity can be saddled
         if(entity instanceof Steerable){
             Steerable steerable = (Steerable) entity;
             if(steerable.hasSaddle()){
@@ -76,6 +73,42 @@ public class JsonHandler {
             }
         }
 
+        // If entity has equipment, get equipment
+        if(entity.getEquipment() != null){
+            EntityEquipment entityEquipment = entity.getEquipment();
+            ItemStack helmet = entityEquipment.getHelmet();
+            if(helmet != null && helmet.getType() != Material.AIR){
+                json.put("helmet", ItemSerializationHandler.getBase64String(helmet));
+                json.put("helmetDropChance", entityEquipment.getHelmetDropChance());
+            }
+            ItemStack chestPlate = entityEquipment.getChestplate();
+            if(chestPlate != null && chestPlate.getType() != Material.AIR){
+                json.put("chestPlate", ItemSerializationHandler.getBase64String(chestPlate));
+                json.put("chestPlateDropChance", entityEquipment.getChestplateDropChance());
+            }
+            ItemStack leggings = entityEquipment.getLeggings();
+            if(leggings != null && leggings.getType() != Material.AIR){
+                json.put("leggings", ItemSerializationHandler.getBase64String(leggings));
+                json.put("leggingsDropChance", entityEquipment.getLeggingsDropChance());
+            }
+            ItemStack boots = entityEquipment.getBoots();
+            if(boots != null && boots.getType() != Material.AIR){
+                json.put("boots", ItemSerializationHandler.getBase64String(boots));
+                json.put("bootsDropChance", entityEquipment.getBootsDropChance());
+            }
+            ItemStack itemMainHand = entityEquipment.getItemInMainHand();
+            if(itemMainHand != null && itemMainHand.getType() != Material.AIR){
+                json.put("itemMainHand", ItemSerializationHandler.getBase64String(itemMainHand));
+                json.put("itemMainHandDropChance", entityEquipment.getItemInMainHandDropChance());
+            }
+            ItemStack itemOffHand = entityEquipment.getItemInOffHand();
+            if(itemOffHand != null && itemOffHand.getType() != Material.AIR){
+                json.put("itemOffHand",ItemSerializationHandler.getBase64String(itemOffHand));
+                json.put("itemOffHandDropChance", entityEquipment.getItemInOffHandDropChance());
+            }
+        }
+
+        // Some other basic properties
         //json.put("display_name", entity.getCustomName()); @deprecated
         json.put("display_name", ComponentHandler.getDisplayName(entity));
         json.put("health", entity.getHealth());
@@ -83,6 +116,7 @@ public class JsonHandler {
         json.put("is_glowing", entity.isGlowing());
         json.put("is_silent", entity.isSilent());
 
+        // Get all entity attributes
         if(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH) != null){
             json.put("max_health", entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
         }
@@ -123,28 +157,22 @@ public class JsonHandler {
             json.put("zombie_spawn_reinforcements", entity.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).getValue());
         }
 
+        // If entity has AI
         json.put("ai_status", entity.hasAI());
 
+        // If entity is adult or baby
         if(entity instanceof Ageable){
             Ageable ageable = (Ageable) entity;
             json.put("is_adult", ageable.isAdult());
         }
+        // If entity is sheep, save color and sheared status
         if(entity instanceof Sheep){
             Sheep sheep = (Sheep) entity;
             json.put("sheep_color", sheep.getColor().toString());
             json.put("sheep_sheared", sheep.isSheared());
         }
 
-
-        // Velocity
-        JSONObject velocityJson = new JSONObject();
-        Vector velocity = entity.getVelocity();
-        velocityJson.put("x", velocity.getX());
-        velocityJson.put("y", velocity.getY());
-        velocityJson.put("z", velocity.getZ());
-        json.put("velocity", velocityJson);
-
-        // Potion effects
+        // If entity has potion effects
         JSONArray effectsJson = new JSONArray();
         Collection<PotionEffect> effects = entity.getActivePotionEffects();
         for (PotionEffect effect : effects) {
@@ -156,19 +184,21 @@ public class JsonHandler {
         }
         json.put("potion_effects", effectsJson);
 
-        // Add more attributes as needed
-
+        // Save JSON
         return json;
     }
 
     public static LivingEntity deserializeLivingEntity(JSONObject json, Location location, World world, Plugin plugin) throws IOException {
-        // Assuming you have some way to get the living entity type from the JSON
+        // Create and spawn entity
         LivingEntity entity = (LivingEntity) world.spawnEntity(location, EntityType.valueOf((String) json.get("type")));
 
+        // Get and Set entity is tamed
         if(json.has("is_tamed")){
             Tameable tameable = (Tameable) entity;
             tameable.setTamed(json.getBoolean("is_tamed"));
         }
+
+        // Get and Set entity`s inventory (e.g. Donkey)
         if(json.has("inventory")){
             ChestedHorse chestedHorse = (ChestedHorse) entity;
             chestedHorse.setCarryingChest(true);
@@ -191,6 +221,8 @@ public class JsonHandler {
 
             }
         }
+
+        // Get and Set entity is saddled
         if(json.has("saddled")){
             if(entity instanceof ChestedHorse){
                 ChestedHorse chestedHorse = (ChestedHorse) entity;
@@ -201,8 +233,33 @@ public class JsonHandler {
             }
         }
 
-        // Basic properties
-        entity.setHealth((int) json.get("health"));
+        // Get and Set entity`s equipment if accessible
+        if(json.has("helmet")){
+            entity.getEquipment().setHelmet(ItemSerializationHandler.getItemStackFromBase64String(json.getString("helmet")));
+            entity.getEquipment().setHelmetDropChance(json.getFloat("helmetDropChance"));
+        }
+        if(json.has("chestPlate")){
+            entity.getEquipment().setChestplate(ItemSerializationHandler.getItemStackFromBase64String(json.getString("chestPlate")));
+            entity.getEquipment().setChestplateDropChance(json.getFloat("chestPlateDropChance"));
+        }
+        if(json.has("leggings")){
+            entity.getEquipment().setLeggings(ItemSerializationHandler.getItemStackFromBase64String(json.getString("leggings")));
+            entity.getEquipment().setLeggingsDropChance(json.getFloat("leggingsDropChance"));
+        }
+        if(json.has("boots")){
+            entity.getEquipment().setBoots(ItemSerializationHandler.getItemStackFromBase64String(json.getString("boots")));
+            entity.getEquipment().setBootsDropChance(json.getFloat("bootsDropChance"));
+        }
+        if(json.has("itemMainHand")){
+            entity.getEquipment().setItemInMainHand(ItemSerializationHandler.getItemStackFromBase64String(json.getString("itemMainHand")));
+            entity.getEquipment().setItemInMainHandDropChance(json.getFloat("itemMainHandDropChance"));
+        }
+        if(json.has("itemOffHand")){
+            entity.getEquipment().setItemInOffHand(ItemSerializationHandler.getItemStackFromBase64String(json.getString("itemOffHand")));
+            entity.getEquipment().setItemInOffHandDropChance(json.getFloat("itemOffHandDropChance"));
+        }
+
+        // Get and Set some basic properties
         if(json.has("display_name")){
             //entity.setCustomName((String) json.get("display_name")); @deprecated
             ComponentHandler.setDisplayName(entity, json.getString("display_name"));
@@ -210,7 +267,7 @@ public class JsonHandler {
         entity.setGlowing((boolean) json.get("is_glowing"));
         entity.setSilent((boolean) json.get("is_silent"));
 
-
+        // Get and Set entity attributes
         AttributeInstance maxHealthAttribute = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         if (maxHealthAttribute != null) {
             Double value;
@@ -343,10 +400,12 @@ public class JsonHandler {
             maxZombieSpawnReinforcementsAttribute.setBaseValue(value);
         }
 
+        // Get and Set entity`s AI status
         if(json.has("ai_status")){
             entity.setAI(json.getBoolean("ai_status"));
         }
 
+        // Get and Set entity is adult or baby
         if(json.has("is_adult")){
             Ageable ageable = (Ageable) entity;
             if(json.getBoolean("is_adult")){
@@ -355,13 +414,16 @@ public class JsonHandler {
                 ageable.setBaby();
             }
         }
+
+        // Get and Set if entity is a sheep, sheep color and sheared status
         if(json.has("sheep_color")){
             Sheep sheep = (Sheep) entity;
             sheep.setColor(DyeColor.valueOf(json.getString("sheep_color")));
             sheep.setSheared(json.getBoolean("sheep_sheared"));
         }
 
-        // Potion effects
+
+        // Get and Set potion effects
         JSONArray effectsJson = (JSONArray) json.get("potion_effects");
         for (Object effectObj : effectsJson) {
             JSONObject effectJson = (JSONObject) effectObj;
@@ -371,10 +433,10 @@ public class JsonHandler {
             int amplifier = ((Long) effectJson.get("amplifier")).intValue();
             entity.addPotionEffect(new PotionEffect(type, duration, amplifier));
         }
+        // Finally set entity health (at the end to prevent duplication bug when health > maxHealth)
+        entity.setHealth((int) json.get("health"));
 
-
-        // Add more attributes as needed
-
+        // Return entity for further processing if needed
         return entity;
     }
 

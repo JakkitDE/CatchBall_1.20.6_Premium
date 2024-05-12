@@ -28,6 +28,9 @@ public class InteractEntity implements Listener {
             return;
         if(event.getHand() == EquipmentSlot.OFF_HAND)
             return;
+        if(event.getRightClicked() instanceof Player){
+            return;
+        }
 
         if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
             return;

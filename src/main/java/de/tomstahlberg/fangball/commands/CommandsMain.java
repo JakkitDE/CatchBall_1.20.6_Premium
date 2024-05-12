@@ -2,10 +2,15 @@ package de.tomstahlberg.fangball.commands;
 
 import de.tomstahlberg.fangball.utils.CleanMobEggHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class CommandsMain implements CommandExecutor {
@@ -41,6 +46,11 @@ public class CommandsMain implements CommandExecutor {
                     }
                 }
             }else{
+                if(strings[0].equalsIgnoreCase("spawn")){
+                    Player player = (Player) commandSender;
+                    LivingEntity entity = (LivingEntity) player.getLocation().getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE);
+                    entity.getEquipment().setItemInOffHand(new ItemStack(Material.DIAMOND_HOE));
+                }
                 showHelp(commandSender);
             }
         }
