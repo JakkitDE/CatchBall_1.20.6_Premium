@@ -2,13 +2,17 @@ package de.tomstahlberg.fangball;
 
 import de.tomstahlberg.fangball.commands.CommandsMain;
 import de.tomstahlberg.fangball.commands.CommandsMainTabCompleter;
+import de.tomstahlberg.fangball.configuration.ConfigHandler;
 import de.tomstahlberg.fangball.events.InteractEntity;
 import de.tomstahlberg.fangball.events.InteractEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
+
 public final class FangBall extends JavaPlugin {
     public static Plugin plugin;
+    public static ConfigHandler configHandler;
     /*
     * TODO
     * Fangball prüfen ob einweg oder mehrweg, beim Platzieren dann leeres Mehrweg bekommen oder
@@ -22,6 +26,12 @@ public final class FangBall extends JavaPlugin {
     public void onEnable() {
         // Plugin startup logic
         plugin = this;
+        try {
+            configHandler = new ConfigHandler(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         getServer().getPluginManager().registerEvents(new InteractEvent(), this);
         getServer().getPluginManager().registerEvents(new InteractEntity(), this);
 

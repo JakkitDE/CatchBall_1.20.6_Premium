@@ -5,6 +5,7 @@ import de.tomstahlberg.fangball.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
@@ -55,6 +56,8 @@ public class InteractEvent implements Listener {
             }else{
                 InventoryHandler.removeOneItem(player.getInventory().getItemInMainHand());
             }
+            player.playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 1.0f, 1.0f);
+
             //
             player.sendMessage("§6§lGolden§3§lSky §8x §2Du hast ein Mob freigelassen.");
             event.setCancelled(true);

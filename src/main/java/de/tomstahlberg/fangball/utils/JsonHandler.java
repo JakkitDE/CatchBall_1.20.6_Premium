@@ -4,6 +4,7 @@ import de.tomstahlberg.fangball.FangBall;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
@@ -183,6 +184,11 @@ public class JsonHandler {
             effectsJson.put(effectJson);
         }
         json.put("potion_effects", effectsJson);
+
+        // NBT Test
+        CraftEntity craftEntity = (CraftEntity) entity;
+        net.minecraft.world.entity.Entity nmsEntity = craftEntity.getHandle();
+
 
         // Save JSON
         return json;
