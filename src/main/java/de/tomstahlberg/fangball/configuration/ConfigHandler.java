@@ -35,12 +35,10 @@ public class ConfigHandler {
             return;
         }
         YamlConfiguration yamlConfiguration = new YamlConfiguration();
-        yamlConfiguration.set("","# Plugin made by Kadnick");
-        yamlConfiguration.set("","# See documentation https://blablub.de/blablub");
         yamlConfiguration.set("sounds.catchSound","ENTITY_TURTLE_EGG_CRACK");
         yamlConfiguration.set("sounds.releaseSound","BLOCK_BREWING_STAND_BREW");
         yamlConfiguration.set("sounds.noPermissionSound", "ENTITY_VILLAGER_NO");
-        yamlConfiguration.set("hooks.SuperiorSkyBlock2",false);
+        yamlConfiguration.set("hooks.SuperiorSkyBlock2.enabled",false);
         yamlConfiguration.set("hooks.SuperiorSkyBlock2.onlyUseOnIslandIfAllowed",false);
 
         List<String> allowedWorlds = new ArrayList<>();
@@ -56,14 +54,12 @@ public class ConfigHandler {
             return;
         }
         YamlConfiguration yamlConfiguration = new YamlConfiguration();
-        yamlConfiguration.set("","# Plugin made by Kadnick");
-        yamlConfiguration.set("","# See documentation https://blablub.de/blablub");
-        yamlConfiguration.set("prefix","§6§lGolden§3§lSky §8x");
-        yamlConfiguration.set("messages.mobCatched","§6§lGolden§3§lSky §8x §2Du hast ein Mob eingefangen.");
-        yamlConfiguration.set("messages.mobReleased","§6§lGolden§3§lSky §8x §2Du hast ein Mob freigelassen.");
-        yamlConfiguration.set("messages.alreadyHasMob","§6§lGolden§3§lSky §8x §7Der FangBall hat bereits ein Mob.");
-        yamlConfiguration.set("messages.notInAllowedWorld","§6§lGolden§3§lSky §8x §7In dieser Welt darfst du keine Fangbälle benutzen.");
-        yamlConfiguration.set("messages.noPermissionOnIsland","§6§lGolden§3§lSky §8x §7Auf dieser Insel darfs du keine Fangbälle benutzen.");
+        yamlConfiguration.set("prefix","§6§lFang§3§lBall §8x");
+        yamlConfiguration.set("messages.mobCatched","§2You catched a mob.");
+        yamlConfiguration.set("messages.mobReleased","§2You released a mob.");
+        yamlConfiguration.set("messages.alreadyHasMob","§7This fangball already has a mob.");
+        yamlConfiguration.set("messages.notInAllowedWorld","§7You are not allowed to use fangballs in this world.");
+        yamlConfiguration.set("messages.noPermissionOnIsland","§7You are not allowed to use fangballs on this island.");
         this.language = yamlConfiguration;
         yamlConfiguration.save(this.languageFile);
     }
@@ -125,7 +121,7 @@ public class ConfigHandler {
         }
     }
     public boolean isSuperiorSkyBlockHookEnabled(){
-        return this.configuration.getBoolean("hooks.SuperiorSkyBlock2");
+        return this.configuration.getBoolean("hooks.SuperiorSkyBlock2.enabled");
     }
     public boolean isSuperiorSkyBlockUsingOnlyOnIslandsIfAllowedEnabled(){
         return this.configuration.getBoolean("hooks.SuperiorSkyBlock2.onlyUseOnIslandIfAllowed");
@@ -151,5 +147,8 @@ public class ConfigHandler {
     }
     public String getNoPermissionOnIslandMessage(){
         return this.language.getString("prefix")+this.language.getString("messages.noPermissionOnIsland");
+    }
+    public void disableSuperiorSkyblockHook(){
+        this.configuration.set("hooks.SuperiorSkyBlock2.enabled",false);
     }
 }

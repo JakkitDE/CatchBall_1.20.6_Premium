@@ -39,7 +39,14 @@ public class InteractEntity implements Listener {
 
         if(CleanMobEggHandler.isMobEggItem(itemStack)){
             if(CleanMobEggHandler.isFilledMobEggItem(itemStack)){
-                player.sendMessage("§6§lGolden§3§lSky §8x §2Der FangBall wird bereits bewohnt..");
+                if(!(FangBall.configHandler.getAlreadyFilledMessage().equalsIgnoreCase(""))){
+                    player.sendMessage(FangBall.configHandler.getAlreadyFilledMessage());
+                }
+                if(FangBall.configHandler.noPermissionSoundEnabled()){
+                    if(FangBall.configHandler.getNoPermissionSound() != null){
+                        player.playSound(player.getLocation(), FangBall.configHandler.getNoPermissionSound(), 1.0f, 1.0f);
+                    }
+                }
                 event.setCancelled(true);
             }else{
                 JSONObject jsonObject = JsonHandler.serializeLivingEntity((LivingEntity) event.getRightClicked());
