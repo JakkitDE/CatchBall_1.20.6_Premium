@@ -40,7 +40,8 @@ public final class FangBall extends JavaPlugin {
                 configHandler.disableSuperiorSkyblockHook();
             }else{
                 Bukkit.getServer().getConsoleSender().sendMessage("§2FangBall -> SuperiorSkyblock2 Hook enabled and plugin found.");
-                getServer().getPluginManager().registerEvents(new RegisterPermissions(), this);
+                //getServer().getPluginManager().registerEvents(new RegisterPermissions(), this);
+                IslandPrivilege.register("fangball");
                 fangballUsePermission = IslandPrivilege.getByName("fangball");
             }
         }
