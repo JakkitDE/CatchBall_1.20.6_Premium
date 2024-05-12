@@ -51,7 +51,9 @@ public class InteractEntity implements Listener {
                 handleItemGive(player, mobEggItem);
 
                 event.getRightClicked().remove();
-                player.sendMessage("§6§lGolden§3§lSky §8x §2Du hast ein Mob eingefangen.");
+                if(!(FangBall.configHandler.getCatchedMessage().equalsIgnoreCase(""))){
+                    player.sendMessage(FangBall.configHandler.getCatchedMessage());
+                }
                 event.setCancelled(true);
             }
         }
@@ -62,7 +64,11 @@ public class InteractEntity implements Listener {
             @Override
             public void run() {
                 player.getInventory().addItem(itemStack);
-                player.playSound(player.getLocation(), Sound.ENTITY_TURTLE_EGG_CRACK, 1.0f, 1.0f);
+                if(FangBall.configHandler.catchSoundEnabled()){
+                    if(FangBall.configHandler.getCatchSound() != null){
+                        player.playSound(player.getLocation(), FangBall.configHandler.getCatchSound(), 1.0f, 1.0f);
+                    }
+                }
             }
         }, 1);
     }

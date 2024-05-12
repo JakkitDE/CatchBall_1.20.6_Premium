@@ -56,10 +56,19 @@ public class InteractEvent implements Listener {
             }else{
                 InventoryHandler.removeOneItem(player.getInventory().getItemInMainHand());
             }
+
+            if(FangBall.configHandler.releaseSoundEnabled()){
+                if(FangBall.configHandler.getReleaseSound() != null){
+                    player.playSound(player.getLocation(), FangBall.configHandler.getReleaseSound(), 1.0f, 1.0f);
+                }
+            }
             player.playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 1.0f, 1.0f);
 
             //
-            player.sendMessage("§6§lGolden§3§lSky §8x §2Du hast ein Mob freigelassen.");
+            if(!(FangBall.configHandler.getReleasedMessage().equalsIgnoreCase(""))){
+                player.sendMessage(FangBall.configHandler.getReleasedMessage());
+            }
+
             event.setCancelled(true);
         }
     }
