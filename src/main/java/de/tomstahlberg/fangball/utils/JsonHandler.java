@@ -290,7 +290,7 @@ public class JsonHandler {
 
         // Get and Set entity attributes
         AttributeInstance maxHealthAttribute = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        if (maxHealthAttribute != null) {
+        if (maxHealthAttribute != null && json.has("max_health")) {
             Double value;
             if(json.get("max_health") instanceof Double){
                 value = json.getDouble("max_health");
@@ -301,7 +301,7 @@ public class JsonHandler {
 
         }
         AttributeInstance maxArmorAttribute = entity.getAttribute(Attribute.GENERIC_ARMOR);
-        if (maxArmorAttribute != null) {
+        if (maxArmorAttribute != null && json.has("armor")) {
             Double value;
             if(json.get("armor") instanceof Double){
                 value = json.getDouble("armor");
@@ -311,7 +311,7 @@ public class JsonHandler {
             maxArmorAttribute.setBaseValue(value);
         }
         AttributeInstance maxArmorToughnessAttribute = entity.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS);
-        if (maxArmorToughnessAttribute != null) {
+        if (maxArmorToughnessAttribute != null && json.has("armor_toughness")) {
             Double value;
             if(json.get("armor_toughness") instanceof Double){
                 value = json.getDouble("armor_toughness");
@@ -321,7 +321,7 @@ public class JsonHandler {
             maxArmorToughnessAttribute.setBaseValue(value);
         }
         AttributeInstance maxAttackDamageAttribute = entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
-        if (maxAttackDamageAttribute != null) {
+        if (maxAttackDamageAttribute != null && json.has("attack_damage")) {
             Double value;
             if(json.get("attack_damage") instanceof Double){
                 value = json.getDouble("attack_damage");
@@ -331,7 +331,7 @@ public class JsonHandler {
             maxAttackDamageAttribute.setBaseValue(value);
         }
         AttributeInstance maxAttackKnockbackAttribute = entity.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK);
-        if (maxAttackKnockbackAttribute != null) {
+        if (maxAttackKnockbackAttribute != null && json.has("attack_knockback")) {
             Double value;
             if(json.get("attack_knockback") instanceof Double){
                 value = json.getDouble("attack_knockback");
@@ -341,7 +341,7 @@ public class JsonHandler {
             maxAttackKnockbackAttribute.setBaseValue(value);
         }
         AttributeInstance maxAttackSpeedAttribute = entity.getAttribute(Attribute.GENERIC_ATTACK_SPEED);
-        if (maxAttackSpeedAttribute != null) {
+        if (maxAttackSpeedAttribute != null && json.has("attack_speed")) {
             Double value;
             if(json.get("attack_speed") instanceof Double){
                 value = json.getDouble("attack_speed");
@@ -351,7 +351,7 @@ public class JsonHandler {
             maxAttackSpeedAttribute.setBaseValue(value);
         }
         AttributeInstance maxFollowRangeAttribute = entity.getAttribute(Attribute.GENERIC_FOLLOW_RANGE);
-        if (maxFollowRangeAttribute != null) {
+        if (maxFollowRangeAttribute != null && json.has("follow_range")) {
             Double value;
             if(json.get("follow_range") instanceof Double){
                 value = json.getDouble("follow_range");
@@ -361,7 +361,7 @@ public class JsonHandler {
             maxFollowRangeAttribute.setBaseValue(value);
         }
         AttributeInstance maxKnockbackResistanceAttribute = entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
-        if (maxKnockbackResistanceAttribute != null) {
+        if (maxKnockbackResistanceAttribute != null && json.has("knockback_resistance")) {
             Double value;
             if(json.get("knockback_resistance") instanceof Double){
                 value = json.getDouble("knockback_resistance");
@@ -371,7 +371,7 @@ public class JsonHandler {
             maxKnockbackResistanceAttribute.setBaseValue(value);
         }
         AttributeInstance maxLuckAttribute = entity.getAttribute(Attribute.GENERIC_LUCK);
-        if (maxLuckAttribute != null) {
+        if (maxLuckAttribute != null && json.has("luck")) {
             Double value;
             if(json.get("luck") instanceof Double){
                 value = json.getDouble("luck");
@@ -381,7 +381,7 @@ public class JsonHandler {
             maxLuckAttribute.setBaseValue(value);
         }
         AttributeInstance maxAbsorptionAttribute = entity.getAttribute(Attribute.GENERIC_MAX_ABSORPTION);
-        if (maxAbsorptionAttribute != null) {
+        if (maxAbsorptionAttribute != null && json.has("max_absorption")) {
             Double value;
             if(json.get("max_absorption") instanceof Double){
                 value = json.getDouble("max_absorption");
@@ -391,7 +391,7 @@ public class JsonHandler {
             maxAbsorptionAttribute.setBaseValue(value);
         }
         AttributeInstance maxMovementSpeedAttribute = entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
-        if (maxMovementSpeedAttribute != null) {
+        if (maxMovementSpeedAttribute != null && json.has("movement_speed")) {
             Double value;
             if(json.get("movement_speed") instanceof Double){
                 value = json.getDouble("movement_speed");
@@ -401,7 +401,7 @@ public class JsonHandler {
             maxMovementSpeedAttribute.setBaseValue(value);
         }
         AttributeInstance maxJumpStrengthAttribute = entity.getAttribute(Attribute.GENERIC_JUMP_STRENGTH);
-        if (maxJumpStrengthAttribute != null) {
+        if (maxJumpStrengthAttribute != null && json.has("jump_strength")) {
             Double value;
             if(json.get("jump_strength") instanceof Double){
                 value = json.getDouble("jump_strength");
@@ -411,7 +411,7 @@ public class JsonHandler {
             maxJumpStrengthAttribute.setBaseValue(value);
         }
         AttributeInstance maxZombieSpawnReinforcementsAttribute = entity.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS);
-        if (maxZombieSpawnReinforcementsAttribute != null) {
+        if (maxZombieSpawnReinforcementsAttribute != null && json.has("zombie_spawn_reinforcements")) {
             Double value;
             if(json.get("zombie_spawn_reinforcements") instanceof Double){
                 value = json.getDouble("zombie_spawn_reinforcements");
@@ -423,7 +423,7 @@ public class JsonHandler {
 
         // added in 1.20.6
         AttributeInstance maxFallDamageMultiplierAttribute = entity.getAttribute(Attribute.GENERIC_FALL_DAMAGE_MULTIPLIER);
-        if (maxFallDamageMultiplierAttribute != null) {
+        if (maxFallDamageMultiplierAttribute != null && json.has("fall_damage_multiplier")) {
             Double value;
             if(json.get("fall_damage_multiplier") instanceof Double){
                 value = json.getDouble("fall_damage_multiplier");
@@ -433,7 +433,7 @@ public class JsonHandler {
             maxFallDamageMultiplierAttribute.setBaseValue(value);
         }
         AttributeInstance maxGravityAttribute = entity.getAttribute(Attribute.GENERIC_GRAVITY);
-        if (maxGravityAttribute != null) {
+        if (maxGravityAttribute != null && json.has("gravity")) {
             Double value;
             if(json.get("gravity") instanceof Double){
                 value = json.getDouble("gravity");
@@ -443,7 +443,7 @@ public class JsonHandler {
             maxGravityAttribute.setBaseValue(value);
         }
         AttributeInstance maxSafeFallDistanceAttribute = entity.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE);
-        if (maxSafeFallDistanceAttribute != null) {
+        if (maxSafeFallDistanceAttribute != null && json.has("save_fall_distance")) {
             Double value;
             if(json.get("save_fall_distance") instanceof Double){
                 value = json.getDouble("save_fall_distance");
@@ -453,7 +453,7 @@ public class JsonHandler {
             maxSafeFallDistanceAttribute.setBaseValue(value);
         }
         AttributeInstance maxScaleAttribute = entity.getAttribute(Attribute.GENERIC_SCALE);
-        if (maxScaleAttribute != null) {
+        if (maxScaleAttribute != null && json.has("scale")) {
             Double value;
             if(json.get("scale") instanceof Double){
                 value = json.getDouble("scale");
@@ -463,7 +463,7 @@ public class JsonHandler {
             maxScaleAttribute.setBaseValue(value);
         }
         AttributeInstance maxStepHeightAttribute = entity.getAttribute(Attribute.GENERIC_STEP_HEIGHT);
-        if (maxStepHeightAttribute != null) {
+        if (maxStepHeightAttribute != null && json.has("step_height")) {
             Double value;
             if(json.get("step_height") instanceof Double){
                 value = json.getDouble("step_height");
