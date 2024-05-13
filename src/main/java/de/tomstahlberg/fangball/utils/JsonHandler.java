@@ -159,6 +159,22 @@ public class JsonHandler {
         if(entity.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS) != null){
             json.put("zombie_spawn_reinforcements", entity.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).getValue());
         }
+        // added in 1.20.6
+        if(entity.getAttribute(Attribute.GENERIC_FALL_DAMAGE_MULTIPLIER) != null){
+            json.put("fall_damage_multiplier", entity.getAttribute(Attribute.GENERIC_FALL_DAMAGE_MULTIPLIER).getValue());
+        }
+        if(entity.getAttribute(Attribute.GENERIC_GRAVITY) != null){
+            json.put("gravity", entity.getAttribute(Attribute.GENERIC_GRAVITY).getValue());
+        }
+        if(entity.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE) != null){
+            json.put("save_fall_distance", entity.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).getValue());
+        }
+        if(entity.getAttribute(Attribute.GENERIC_SCALE) != null){
+            json.put("scale", entity.getAttribute(Attribute.GENERIC_SCALE).getValue());
+        }
+        if(entity.getAttribute(Attribute.GENERIC_STEP_HEIGHT) != null){
+            json.put("step_height", entity.getAttribute(Attribute.GENERIC_STEP_HEIGHT).getValue());
+        }
 
         // If entity has AI
         json.put("ai_status", entity.hasAI());
@@ -403,6 +419,58 @@ public class JsonHandler {
                 value = Double.valueOf(json.get("zombie_spawn_reinforcements").toString());
             }
             maxZombieSpawnReinforcementsAttribute.setBaseValue(value);
+        }
+
+        // added in 1.20.6
+        AttributeInstance maxFallDamageMultiplierAttribute = entity.getAttribute(Attribute.GENERIC_FALL_DAMAGE_MULTIPLIER);
+        if (maxFallDamageMultiplierAttribute != null) {
+            Double value;
+            if(json.get("fall_damage_multiplier") instanceof Double){
+                value = json.getDouble("fall_damage_multiplier");
+            }else{
+                value = Double.valueOf(json.get("fall_damage_multiplier").toString());
+            }
+            maxFallDamageMultiplierAttribute.setBaseValue(value);
+        }
+        AttributeInstance maxGravityAttribute = entity.getAttribute(Attribute.GENERIC_GRAVITY);
+        if (maxGravityAttribute != null) {
+            Double value;
+            if(json.get("gravity") instanceof Double){
+                value = json.getDouble("gravity");
+            }else{
+                value = Double.valueOf(json.get("gravity").toString());
+            }
+            maxGravityAttribute.setBaseValue(value);
+        }
+        AttributeInstance maxSafeFallDistanceAttribute = entity.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE);
+        if (maxSafeFallDistanceAttribute != null) {
+            Double value;
+            if(json.get("save_fall_distance") instanceof Double){
+                value = json.getDouble("save_fall_distance");
+            }else{
+                value = Double.valueOf(json.get("save_fall_distance").toString());
+            }
+            maxSafeFallDistanceAttribute.setBaseValue(value);
+        }
+        AttributeInstance maxScaleAttribute = entity.getAttribute(Attribute.GENERIC_SCALE);
+        if (maxScaleAttribute != null) {
+            Double value;
+            if(json.get("scale") instanceof Double){
+                value = json.getDouble("scale");
+            }else{
+                value = Double.valueOf(json.get("scale").toString());
+            }
+            maxScaleAttribute.setBaseValue(value);
+        }
+        AttributeInstance maxStepHeightAttribute = entity.getAttribute(Attribute.GENERIC_STEP_HEIGHT);
+        if (maxStepHeightAttribute != null) {
+            Double value;
+            if(json.get("step_height") instanceof Double){
+                value = json.getDouble("step_height");
+            }else{
+                value = Double.valueOf(json.get("step_height").toString());
+            }
+            maxStepHeightAttribute.setBaseValue(value);
         }
 
         // Get and Set entity`s AI status

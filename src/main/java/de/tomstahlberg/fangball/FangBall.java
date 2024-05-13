@@ -33,7 +33,6 @@ public final class FangBall extends JavaPlugin {
         }
         if(configHandler.isSuperiorSkyBlockHookEnabled()){
             getServer().getPluginManager().registerEvents(new PluginInitializeSSB(), this);
-            fangballUsePermission = IslandPrivilege.getByName("FANGBALL");
         }
         getServer().getPluginManager().registerEvents(new InteractEvent(), this);
         getServer().getPluginManager().registerEvents(new InteractEntity(), this);
