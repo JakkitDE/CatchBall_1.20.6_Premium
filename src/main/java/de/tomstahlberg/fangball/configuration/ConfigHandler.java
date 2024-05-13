@@ -3,7 +3,6 @@ package de.tomstahlberg.fangball.configuration;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.World;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 

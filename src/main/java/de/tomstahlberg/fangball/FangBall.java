@@ -7,7 +7,6 @@ import de.tomstahlberg.fangball.configuration.ConfigHandler;
 import de.tomstahlberg.fangball.events.InteractEntity;
 import de.tomstahlberg.fangball.events.InteractEvent;
 import de.tomstahlberg.fangball.events.PluginInitializeSSB;
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 

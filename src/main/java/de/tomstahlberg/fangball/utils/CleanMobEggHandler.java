@@ -3,7 +3,6 @@ package de.tomstahlberg.fangball.utils;
 import de.tomstahlberg.fangball.FangBall;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
