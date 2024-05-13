@@ -18,8 +18,7 @@ public final class FangBall extends JavaPlugin {
     public static IslandPrivilege fangballUsePermission;
     /*
     * TODO
-    *
-    * Wenn man ein Mob platziert, dann sicherstellen, das das neue Item clear ist..
+    * Nothing to see here currently
     * */
     @Override
     public void onEnable() {

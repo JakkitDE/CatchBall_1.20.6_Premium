@@ -20,9 +20,8 @@ public class MobEggCreator {
         this.plugin = plugin;
         this.jsonObjectString = jsonObject.toString();
         this.jsonObject = jsonObject;
-        //this.itemStack = itemStack;
         this.persistentDataContainer = persistentDataContainer;
-        this.mobbEggItem = itemStack;
+        this.mobbEggItem = new ItemStack(itemStack);
         createMobEggItem();
     }
     private void createMobEggItem() throws IOException {
