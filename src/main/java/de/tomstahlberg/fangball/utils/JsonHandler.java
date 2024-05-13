@@ -4,7 +4,6 @@ import de.tomstahlberg.fangball.FangBall;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
@@ -151,8 +150,11 @@ public class JsonHandler {
         if(entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED) != null){
             json.put("movement_speed", entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getValue());
         }
-        if(entity.getAttribute(Attribute.HORSE_JUMP_STRENGTH) != null){
+        /*if(entity.getAttribute(Attribute.HORSE_JUMP_STRENGTH) != null){
             json.put("horse_jump_strength", entity.getAttribute(Attribute.HORSE_JUMP_STRENGTH).getValue());
+        }@removed */
+        if(entity.getAttribute(Attribute.GENERIC_JUMP_STRENGTH) != null){
+            json.put("jump_strength", entity.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).getValue());
         }
         if(entity.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS) != null){
             json.put("zombie_spawn_reinforcements", entity.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).getValue());
@@ -185,9 +187,6 @@ public class JsonHandler {
         }
         json.put("potion_effects", effectsJson);
 
-        // NBT Test
-        CraftEntity craftEntity = (CraftEntity) entity;
-        net.minecraft.world.entity.Entity nmsEntity = craftEntity.getHandle();
 
 
         // Save JSON
@@ -385,15 +384,15 @@ public class JsonHandler {
             }
             maxMovementSpeedAttribute.setBaseValue(value);
         }
-        AttributeInstance maxHorseJumpStrengthAttribute = entity.getAttribute(Attribute.HORSE_JUMP_STRENGTH);
-        if (maxHorseJumpStrengthAttribute != null) {
+        AttributeInstance maxJumpStrengthAttribute = entity.getAttribute(Attribute.GENERIC_JUMP_STRENGTH);
+        if (maxJumpStrengthAttribute != null) {
             Double value;
-            if(json.get("horse_jump_strength") instanceof Double){
-                value = json.getDouble("horse_jump_strength");
+            if(json.get("jump_strength") instanceof Double){
+                value = json.getDouble("jump_strength");
             }else{
-                value = Double.valueOf(json.get("horse_jump_strength").toString()) ;
+                value = Double.valueOf(json.get("jump_strength").toString()) ;
             }
-            maxHorseJumpStrengthAttribute.setBaseValue(value);
+            maxJumpStrengthAttribute.setBaseValue(value);
         }
         AttributeInstance maxZombieSpawnReinforcementsAttribute = entity.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS);
         if (maxZombieSpawnReinforcementsAttribute != null) {

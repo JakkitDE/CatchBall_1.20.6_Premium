@@ -26,7 +26,9 @@ public class CommandsMain implements CommandExecutor {
                     Player player = Bukkit.getPlayer(strings[1]);
                     Integer amount = Integer.valueOf(strings[3]);
                     if(strings[2].equalsIgnoreCase("single")){
-                        player.getInventory().addItem(CleanMobEggHandler.getSingleMobEggItem(amount));
+                        for(int i = 0;i<amount;i++){
+                            player.getInventory().addItem(CleanMobEggHandler.getSingleMobEggItem(1));
+                        }
                         if(amount >1){
                             player.sendMessage("§6§lGolden§3§lSky §8x §2Du hast soeben "+amount+" Einweg Fangbälle erhalten.");
                         }else{
@@ -34,7 +36,9 @@ public class CommandsMain implements CommandExecutor {
                         }
 
                     }else if(strings[2].equalsIgnoreCase("multi")){
-                        player.getInventory().addItem(CleanMobEggHandler.getMultiMobEggItem(amount));
+                        for(int i = 0;i<amount;i++){
+                            player.getInventory().addItem(CleanMobEggHandler.getMultiMobEggItem(1));
+                        }
                         if(amount >1){
                             player.sendMessage("§6§lGolden§3§lSky §8x §2Du hast soeben "+amount+" §5Mehrweg §2Fangbälle erhalten.");
                         }else{

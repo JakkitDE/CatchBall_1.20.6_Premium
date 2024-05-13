@@ -36,17 +36,29 @@ public class InteractEvent implements Listener {
             if(event.getHand() == EquipmentSlot.OFF_HAND)
                 return;
 
-            //Check if in allowed world
-            if(!FangBall.configHandler.getAllowedWorlds().contains(player.getWorld())){
-                if(!FangBall.configHandler.getNotAllowedWorldMessage().equalsIgnoreCase(""))
-                    player.sendMessage(FangBall.configHandler.getNotAllowedWorldMessage());
-
+            //Check if player has permission
+            if(!(player.hasPermission("fangball.use")) && !(player.isOp())){
+                if(!FangBall.configHandler.getNoPermissionMessage().equalsIgnoreCase(""))
+                    player.sendMessage(FangBall.configHandler.getNoPermissionMessage());
                 if(FangBall.configHandler.noPermissionSoundEnabled()){
-                    if(FangBall.configHandler.getNoPermissionSound() != null)
-                        player.playSound(player.getLocation(),FangBall.configHandler.getNoPermissionSound(), 1.0f, 1.0f);
+                    player.playSound(player.getLocation(),FangBall.configHandler.getNoPermissionSound(), 1.0f, 1.0f);
                 }
                 return;
             }
+            //Check if in allowed world
+            if(!player.hasPermission("fangball.use.world.bypass") || !player.isOp()){
+                if(!FangBall.configHandler.getAllowedWorlds().contains(player.getWorld())){
+                    if(!FangBall.configHandler.getNotAllowedWorldMessage().equalsIgnoreCase(""))
+                        player.sendMessage(FangBall.configHandler.getNotAllowedWorldMessage());
+
+                    if(FangBall.configHandler.noPermissionSoundEnabled()){
+                        if(FangBall.configHandler.getNoPermissionSound() != null)
+                            player.playSound(player.getLocation(),FangBall.configHandler.getNoPermissionSound(), 1.0f, 1.0f);
+                    }
+                    return;
+                }
+            }
+
             //Check for SuperiorSkyblock hook
             if(FangBall.configHandler.isSuperiorSkyBlockHookEnabled()){
                 // Check if Player has permission on island
@@ -61,15 +73,6 @@ public class InteractEvent implements Listener {
                         return;
                     }
                 }
-            }
-            //Check if player has permission
-            if(!(player.hasPermission("fangball.use")) && !(player.isOp())){
-                if(!FangBall.configHandler.getNoPermissionMessage().equalsIgnoreCase(""))
-                    player.sendMessage(FangBall.configHandler.getNoPermissionMessage());
-                if(FangBall.configHandler.noPermissionSoundEnabled()){
-                    player.playSound(player.getLocation(),FangBall.configHandler.getNoPermissionSound(), 1.0f, 1.0f);
-                }
-                return;
             }
 
             //

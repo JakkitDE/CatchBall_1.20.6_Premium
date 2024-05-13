@@ -6,6 +6,7 @@ import de.tomstahlberg.fangball.commands.CommandsMainTabCompleter;
 import de.tomstahlberg.fangball.configuration.ConfigHandler;
 import de.tomstahlberg.fangball.events.InteractEntity;
 import de.tomstahlberg.fangball.events.InteractEvent;
+import de.tomstahlberg.fangball.events.PluginInitializeSSB;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,15 +32,8 @@ public final class FangBall extends JavaPlugin {
             throw new RuntimeException(e);
         }
         if(configHandler.isSuperiorSkyBlockHookEnabled()){
-            if(Bukkit.getServer().getPluginManager().getPlugin("SuperiorSkyblock2") == null){
-                Bukkit.getServer().getConsoleSender().sendMessage("§cFangBall -> SuperiorSkyblock2 Hook enabled, but is not installed. Disabling hook for current session....");
-                configHandler.disableSuperiorSkyblockHook();
-            }else{
-                Bukkit.getServer().getConsoleSender().sendMessage("§2FangBall -> SuperiorSkyblock2 Hook enabled and plugin found.");
-                //getServer().getPluginManager().registerEvents(new RegisterPermissions(), this);
-                IslandPrivilege.register("FANGBALL");
-                fangballUsePermission = IslandPrivilege.getByName("FANGBALL");
-            }
+            getServer().getPluginManager().registerEvents(new PluginInitializeSSB(), this);
+            fangballUsePermission = IslandPrivilege.getByName("FANGBALL");
         }
         getServer().getPluginManager().registerEvents(new InteractEvent(), this);
         getServer().getPluginManager().registerEvents(new InteractEntity(), this);

@@ -2,7 +2,7 @@ name: FangBall
 version: '${project.version}'
 main: de.tomstahlberg.fangball.FangBall
 api-version: 1.20
-softdepend:
+loadbefore:
   - SuperiorSkyblock2
 commands:
   fangball:

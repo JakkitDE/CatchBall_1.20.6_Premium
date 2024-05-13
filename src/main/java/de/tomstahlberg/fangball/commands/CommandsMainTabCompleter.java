@@ -37,7 +37,7 @@ public class CommandsMainTabCompleter implements TabCompleter {
                     list.add("64");
                     break;
                 default:
-                    list.add("error");
+                    list.add("No more values available..");
             }
         }
 

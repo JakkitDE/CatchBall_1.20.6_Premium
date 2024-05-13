@@ -48,7 +48,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>ca.bkaw</groupId>
                 <artifactId>paper-nms-maven-plugin</artifactId>
                 <version>1.4.3</version>
@@ -60,7 +60,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -104,7 +104,7 @@
         <dependency>
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.20.4-R0.1-SNAPSHOT</version>
+            <version>1.20.6-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -112,12 +112,12 @@
             <artifactId>json</artifactId>
             <version>20240303</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>ca.bkaw</groupId>
             <artifactId>paper-nms</artifactId>
             <version>1.20.4-SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>com.bgsoftware</groupId>
             <artifactId>SuperiorSkyblockAPI</artifactId>

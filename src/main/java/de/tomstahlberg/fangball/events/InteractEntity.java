@@ -2,23 +2,16 @@ package de.tomstahlberg.fangball.events;
 
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.island.Island;
-import com.bgsoftware.superiorskyblock.api.island.IslandPrivilege;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import de.tomstahlberg.fangball.FangBall;
 import de.tomstahlberg.fangball.utils.*;
-import net.minecraft.world.Container;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftDonkey;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventory;
-import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftSaddledInventory;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.json.JSONObject;
 
@@ -36,16 +29,28 @@ public class InteractEntity implements Listener {
             return;
         }
 
-        //Check if in allowed world
-        if(!FangBall.configHandler.getAllowedWorlds().contains(player.getWorld())){
-            if(!FangBall.configHandler.getNotAllowedWorldMessage().equalsIgnoreCase(""))
-                player.sendMessage(FangBall.configHandler.getNotAllowedWorldMessage());
-
+        //Check if player has permission
+        if(!(player.hasPermission("fangball.use")) && !(player.isOp())){
+            if(!FangBall.configHandler.getNoPermissionMessage().equalsIgnoreCase(""))
+                player.sendMessage(FangBall.configHandler.getNoPermissionMessage());
             if(FangBall.configHandler.noPermissionSoundEnabled()){
-                if(FangBall.configHandler.getNoPermissionSound() != null)
-                    player.playSound(player.getLocation(),FangBall.configHandler.getNoPermissionSound(), 1.0f, 1.0f);
+                player.playSound(player.getLocation(),FangBall.configHandler.getNoPermissionSound(), 1.0f, 1.0f);
             }
             return;
+        }
+
+        //Check if in allowed world
+        if(!FangBall.configHandler.getAllowedWorlds().contains(player.getWorld())){
+            if(!player.hasPermission("fangball.use.world.bypass") || !player.isOp()){
+                if(!FangBall.configHandler.getNotAllowedWorldMessage().equalsIgnoreCase(""))
+                    player.sendMessage(FangBall.configHandler.getNotAllowedWorldMessage());
+
+                if(FangBall.configHandler.noPermissionSoundEnabled()){
+                    if(FangBall.configHandler.getNoPermissionSound() != null)
+                        player.playSound(player.getLocation(),FangBall.configHandler.getNoPermissionSound(), 1.0f, 1.0f);
+                }
+                return;
+            }
         }
         //Check for SuperiorSkyblock hook
         if(FangBall.configHandler.isSuperiorSkyBlockHookEnabled()){
@@ -62,15 +67,7 @@ public class InteractEntity implements Listener {
                 }
             }
         }
-        //Check if player has permission
-        if(!(player.hasPermission("fangball.use")) && !(player.isOp())){
-            if(!FangBall.configHandler.getNoPermissionMessage().equalsIgnoreCase(""))
-                player.sendMessage(FangBall.configHandler.getNoPermissionMessage());
-            if(FangBall.configHandler.noPermissionSoundEnabled()){
-                player.playSound(player.getLocation(),FangBall.configHandler.getNoPermissionSound(), 1.0f, 1.0f);
-            }
-            return;
-        }
+
 
         if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
             return;
