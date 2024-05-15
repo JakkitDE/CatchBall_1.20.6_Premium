@@ -1,5 +1,8 @@
 package de.tomstahlberg.fangball.utils;
 
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
@@ -30,10 +33,10 @@ public class MobEggCreator {
         List<String> lore = ComponentHandler.getLore(itemStack);
         if(jsonObject.has("display_name")){
             lore.add("");
-            lore.add("§a§lBelegt§7: §6"+this.jsonObject.get("display_name")+" §e#"+jsonObject.get("type"));
+            lore.add("§a§lBelegt§7: §6"+jsonObject.get("display_name")+" §e#"+jsonObject.get("type"));
         }else{
             lore.add("");
-            lore.add("§a§lBelegt§7: §e#"+this.jsonObject.get("type"));
+            lore.add("§a§lBelegt§7: §e#"+ jsonObject.get("type"));
         }
         ComponentHandler.setLore(itemStack, lore);
         PDCHandler.setPDCString(this.plugin, itemStack, "mobdata", this.jsonObjectString);

@@ -1,9 +1,13 @@
 package de.tomstahlberg.fangball.utils;
 
 import de.tomstahlberg.fangball.FangBall;
+import net.minecraft.nbt.*;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.Level;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
@@ -11,10 +15,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.checkerframework.checker.units.qual.C;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -149,9 +156,7 @@ public class JsonHandler {
         if(entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED) != null){
             json.put("movement_speed", entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getValue());
         }
-        /*if(entity.getAttribute(Attribute.HORSE_JUMP_STRENGTH) != null){
-            json.put("horse_jump_strength", entity.getAttribute(Attribute.HORSE_JUMP_STRENGTH).getValue());
-        }@removed */
+
         if(entity.getAttribute(Attribute.GENERIC_JUMP_STRENGTH) != null){
             json.put("jump_strength", entity.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).getValue());
         }
@@ -202,8 +207,10 @@ public class JsonHandler {
         }
         json.put("potion_effects", effectsJson);
 
-
-
+        CraftEntity craftEntity = (CraftEntity) entity;
+        net.minecraft.world.entity.Entity nmsEntity = craftEntity.getHandle();
+        CompoundTag compoundTag = new CompoundTag();
+        nmsEntity.save(compoundTag);
         // Save JSON
         return json;
     }
@@ -507,8 +514,8 @@ public class JsonHandler {
         }
         // Finally set entity health (at the end to prevent duplication bug when health > maxHealth)
         entity.setHealth((int) json.get("health"));
-
         // Return entity for further processing if needed
+        ////return entity;
         return entity;
     }
 
@@ -530,6 +537,77 @@ public class JsonHandler {
     private static boolean isStupidItem(ItemStack itemStack){
         return PDCHandler.hasPDCString(FangBall.plugin, itemStack, "stupiditem");
     }
+    public static JSONObject convertCompoundTagToJSONObject(CompoundTag compoundTag, JSONObject jsonObject) {
+        compoundTag.getAllKeys().forEach(key -> {
+            try {
+                jsonObject.put(key, compoundTag.get(key));
+                //Bukkit.getServer().getConsoleSender().sendMessage("Key: "+key + " / value: "+compoundTag.get(key));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        return jsonObject;
+    }
+    public static CompoundTag convertJSONObjectToCompoundTag(JSONObject jsonObject) {
+        CompoundTag compoundTag = new CompoundTag();
+        /*jsonObject.keySet().forEach(key -> {
+            try {
+                Tag tag = Tag.
+                compoundTag.put(key, jsonObject.get(key);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
+        return compoundTag;*/
+        for (String key : jsonObject.keySet()) {
+            Object value = jsonObject.get(key);
+            if (value instanceof Integer) {
+                compoundTag.putInt(key, (int) value);
+                Bukkit.getServer().getConsoleSender().sendMessage("Success ->"+key+" / "+value);
+            } else if (value instanceof String) {
+                compoundTag.putString(key, (String) value);
+                Bukkit.getServer().getConsoleSender().sendMessage("Success ->"+key+" / "+value);
+            } else if (value instanceof Boolean) {
+                compoundTag.putBoolean(key, (boolean) value);
+                Bukkit.getServer().getConsoleSender().sendMessage("Success ->"+key+" / "+value);
+            } else if (value instanceof Double) {
+                compoundTag.putDouble(key, (double) value);
+                Bukkit.getServer().getConsoleSender().sendMessage("Success ->"+key+" / "+value);
+            } else if (value instanceof Long) {
+                compoundTag.putLong(key, (long) value);
+            } else if (value instanceof JSONObject) {
+                // Wenn der Wert ein weiteres JSONObject ist, rekursiv aufrufen
+                compoundTag.put(key, convertJSONObjectToCompoundTag((JSONObject) value));
+                Bukkit.getServer().getConsoleSender().sendMessage("Success ->"+key+" / "+value);
+            }
+            // Weitere Bedingungen entsprechend der Art der Werte im JSONObject hinzufügen
+        }
 
+        return compoundTag;
+    }
+    private static EntityType getEntityType(JSONObject jsonObject){
+        String fullName = "";
+        if(jsonObject.get("id") instanceof String){
+            fullName = ((String) jsonObject.get("id"));
+        }else if (jsonObject.get("id") instanceof StringTag){
+            fullName = ((StringTag) jsonObject.get("id")).getAsString();
+        }
+        String rawEntityType = fullName.replace("minecraft:", "");
+        rawEntityType = rawEntityType.replace("\"", "");
+        Bukkit.getServer().getConsoleSender().sendMessage("EntityType;"+rawEntityType+";");
+        return EntityType.fromName(rawEntityType);
+    }
+    // Methode zur Serialisierung eines CompoundTag in ein byte[]
+    public static byte[] serializeCompoundTag(CompoundTag compoundTag) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        NbtIo.writeCompressed(compoundTag, outputStream);
+        return outputStream.toByteArray();
+    }
+
+    // Methode zur Deserialisierung eines byte[] in ein CompoundTag
+    public static CompoundTag deserializeCompoundTag(byte[] data) throws IOException {
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+        return NbtIo.readCompressed(inputStream, new NbtAccounter(data.length, data.length));
+    }
 
 }
