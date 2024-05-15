@@ -2,6 +2,7 @@
 # FangBall
 
 A simple plugin to able users to catch and release mobs using single- or multiuseable fangballs. Custom NBT data are not supported. Only PaperMC is supported. No support for Spigot, Bukkit or any other.
+!! Paper >= 1.20.6, Java >= 21 !!
 
 
 
