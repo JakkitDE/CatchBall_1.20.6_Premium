@@ -67,3 +67,6 @@ and set `enabled` of `SuperiorSkyBlock2`to `true`.
         volume: 0.2
         pitch: 0.2
 ```
+If you want to decide your players only to be able to use fangballs inside an island, no matter if they are in an allowed world or not, go to
+`/plugins/FangBall/settings.yml` 
+and set `onlyUseOnIslandIfAllowed` of `SuperiorSkyBlock2`to `true`.
