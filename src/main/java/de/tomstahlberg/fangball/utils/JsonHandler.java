@@ -1,13 +1,9 @@
 package de.tomstahlberg.fangball.utils;
 
 import de.tomstahlberg.fangball.FangBall;
-import net.minecraft.nbt.*;
-import net.minecraft.nbt.Tag;
-import net.minecraft.world.level.Level;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
@@ -15,13 +11,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.checkerframework.checker.units.qual.C;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.*;
 
@@ -29,17 +22,14 @@ public class JsonHandler {
     public static JSONObject serializeLivingEntity(LivingEntity entity) throws IOException {
         // Create new JSON
         JSONObject json = new JSONObject();
-
         // Some basic properties
         json.put("type", entity.getType().name());
-
         // If entity is tamed
         if(entity instanceof Tameable){
             if(((Tameable) entity).isTamed()){
                 json.put("is_tamed", true);
             }
         }
-
         // If Entity has inventory (e.g. donkey)
         if(entity instanceof ChestedHorse){
             if(((ChestedHorse) entity).isCarryingChest()){
@@ -69,7 +59,6 @@ public class JsonHandler {
                 }
             }
         }
-
         // If entity can be saddled
         if(entity instanceof Steerable){
             Steerable steerable = (Steerable) entity;
@@ -77,7 +66,6 @@ public class JsonHandler {
                 json.put("saddled","true");
             }
         }
-
         // If entity has equipment, get equipment
         if(entity.getEquipment() != null){
             EntityEquipment entityEquipment = entity.getEquipment();
@@ -112,7 +100,6 @@ public class JsonHandler {
                 json.put("itemOffHandDropChance", entityEquipment.getItemInOffHandDropChance());
             }
         }
-
         // Some other basic properties
         //json.put("display_name", entity.getCustomName()); @deprecated
         json.put("display_name", ComponentHandler.getDisplayName(entity));
@@ -120,68 +107,28 @@ public class JsonHandler {
         json.put("is_dead", entity.isDead());
         json.put("is_glowing", entity.isGlowing());
         json.put("is_silent", entity.isSilent());
-
         // Get all entity attributes
-        if(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH) != null){
-            json.put("max_health", entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_ARMOR) != null){
-            json.put("armor", entity.getAttribute(Attribute.GENERIC_ARMOR).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS) != null){
-            json.put("armor_toughness", entity.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE) != null){
-            json.put("attack_damage", entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK) != null){
-            json.put("attack_knockback", entity.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_ATTACK_SPEED) != null){
-            json.put("attack_speed", entity.getAttribute(Attribute.GENERIC_ATTACK_SPEED).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_FOLLOW_RANGE) != null){
-            json.put("follow_range", entity.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE) != null){
-            json.put("knockback_resistance", entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_LUCK) != null){
-            json.put("luck", entity.getAttribute(Attribute.GENERIC_LUCK).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_MAX_ABSORPTION) != null){
-            json.put("max_absorption", entity.getAttribute(Attribute.GENERIC_MAX_ABSORPTION).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED) != null){
-            json.put("movement_speed", entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getValue());
-        }
-
-        if(entity.getAttribute(Attribute.GENERIC_JUMP_STRENGTH) != null){
-            json.put("jump_strength", entity.getAttribute(Attribute.GENERIC_JUMP_STRENGTH).getValue());
-        }
-        if(entity.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS) != null){
-            json.put("zombie_spawn_reinforcements", entity.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).getValue());
-        }
-        // added in 1.20.6
-        if(entity.getAttribute(Attribute.GENERIC_FALL_DAMAGE_MULTIPLIER) != null){
-            json.put("fall_damage_multiplier", entity.getAttribute(Attribute.GENERIC_FALL_DAMAGE_MULTIPLIER).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_GRAVITY) != null){
-            json.put("gravity", entity.getAttribute(Attribute.GENERIC_GRAVITY).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE) != null){
-            json.put("save_fall_distance", entity.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_SCALE) != null){
-            json.put("scale", entity.getAttribute(Attribute.GENERIC_SCALE).getValue());
-        }
-        if(entity.getAttribute(Attribute.GENERIC_STEP_HEIGHT) != null){
-            json.put("step_height", entity.getAttribute(Attribute.GENERIC_STEP_HEIGHT).getValue());
-        }
-
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_MAX_HEALTH ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_ARMOR ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_ARMOR_TOUGHNESS ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_ATTACK_DAMAGE ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_ATTACK_KNOCKBACK ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_ATTACK_SPEED ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_FOLLOW_RANGE ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_KNOCKBACK_RESISTANCE ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_LUCK ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_MAX_ABSORPTION ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_MOVEMENT_SPEED ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_JUMP_STRENGTH ,entity);
+        jsonPutAttributeIfExists(json, Attribute.ZOMBIE_SPAWN_REINFORCEMENTS ,entity);
+        // Added in 1.20.6
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_FALL_DAMAGE_MULTIPLIER ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_GRAVITY ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_SAFE_FALL_DISTANCE ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_SCALE ,entity);
+        jsonPutAttributeIfExists(json, Attribute.GENERIC_STEP_HEIGHT ,entity);
         // If entity has AI
         json.put("ai_status", entity.hasAI());
-
         // If entity is adult or baby
         if(entity instanceof Ageable){
             Ageable ageable = (Ageable) entity;
@@ -193,7 +140,6 @@ public class JsonHandler {
             json.put("sheep_color", sheep.getColor().toString());
             json.put("sheep_sheared", sheep.isSheared());
         }
-
         // If entity has potion effects
         JSONArray effectsJson = new JSONArray();
         Collection<PotionEffect> effects = entity.getActivePotionEffects();
@@ -205,7 +151,6 @@ public class JsonHandler {
             effectsJson.put(effectJson);
         }
         json.put("potion_effects", effectsJson);
-
         // Save JSON
         return json;
     }
@@ -213,39 +158,30 @@ public class JsonHandler {
     public static LivingEntity deserializeLivingEntity(JSONObject json, Location location, World world, Plugin plugin) throws IOException {
         // Create and spawn entity
         LivingEntity entity = (LivingEntity) world.spawnEntity(location, EntityType.valueOf((String) json.get("type")));
-
-
-
         // Get and Set entity is tamed
         if(json.has("is_tamed")){
             Tameable tameable = (Tameable) entity;
             tameable.setTamed(json.getBoolean("is_tamed"));
         }
-
         // Get and Set entity`s inventory (e.g. Donkey)
         if(json.has("inventory")){
             ChestedHorse chestedHorse = (ChestedHorse) entity;
             chestedHorse.setCarryingChest(true);
             JSONArray jsonArray = json.getJSONArray("inventory");
             List<byte[]> itemsList = new ArrayList<>();
-
             for(int i = 0;i<jsonArray.length();i++){
                 String base64String = jsonArray.getString(i);
                 byte[] bytes = Base64.getDecoder().decode(base64String);
                 itemsList.add(bytes);
             }
-
             for(int i = 0;i<chestedHorse.getInventory().getSize();i++){
                 byte[] serializedItem = itemsList.get(i);
                 ItemStack itemStack = ItemStack.deserializeBytes(serializedItem);
                 if(isStupidItem(itemStack))
                     continue;
-
                 chestedHorse.getInventory().setItem(i, itemStack);
-
             }
         }
-
         // Get and Set entity is saddled
         if(json.has("saddled")){
             if(entity instanceof ChestedHorse){
@@ -256,7 +192,6 @@ public class JsonHandler {
                 steerable.setSaddle(true);
             }
         }
-
         // Get and Set entity`s equipment if accessible
         if(json.has("helmet")){
             entity.getEquipment().setHelmet(ItemSerializationHandler.getItemStackFromBase64String(json.getString("helmet")));
@@ -282,7 +217,6 @@ public class JsonHandler {
             entity.getEquipment().setItemInOffHand(ItemSerializationHandler.getItemStackFromBase64String(json.getString("itemOffHand")));
             entity.getEquipment().setItemInOffHandDropChance(json.getFloat("itemOffHandDropChance"));
         }
-
         // Get and Set some basic properties
         if(json.has("display_name")){
             //entity.setCustomName((String) json.get("display_name")); @deprecated
@@ -290,197 +224,30 @@ public class JsonHandler {
         }
         entity.setGlowing((boolean) json.get("is_glowing"));
         entity.setSilent((boolean) json.get("is_silent"));
-
         // Get and Set entity attributes
-        AttributeInstance maxHealthAttribute = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-        if (maxHealthAttribute != null && json.has("max_health")) {
-            Double value;
-            if(json.get("max_health") instanceof Double){
-                value = json.getDouble("max_health");
-            }else{
-               value = Double.valueOf(json.get("max_health").toString()) ;
-            }
-            maxHealthAttribute.setBaseValue(value);
-
-        }
-        AttributeInstance maxArmorAttribute = entity.getAttribute(Attribute.GENERIC_ARMOR);
-        if (maxArmorAttribute != null && json.has("armor")) {
-            Double value;
-            if(json.get("armor") instanceof Double){
-                value = json.getDouble("armor");
-            }else{
-                value = Double.valueOf(json.get("armor").toString()) ;
-            }
-            maxArmorAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxArmorToughnessAttribute = entity.getAttribute(Attribute.GENERIC_ARMOR_TOUGHNESS);
-        if (maxArmorToughnessAttribute != null && json.has("armor_toughness")) {
-            Double value;
-            if(json.get("armor_toughness") instanceof Double){
-                value = json.getDouble("armor_toughness");
-            }else{
-                value = Double.valueOf(json.get("armor_toughness").toString()) ;
-            }
-            maxArmorToughnessAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxAttackDamageAttribute = entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
-        if (maxAttackDamageAttribute != null && json.has("attack_damage")) {
-            Double value;
-            if(json.get("attack_damage") instanceof Double){
-                value = json.getDouble("attack_damage");
-            }else{
-                value = Double.valueOf(json.get("attack_damage").toString()) ;
-            }
-            maxAttackDamageAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxAttackKnockbackAttribute = entity.getAttribute(Attribute.GENERIC_ATTACK_KNOCKBACK);
-        if (maxAttackKnockbackAttribute != null && json.has("attack_knockback")) {
-            Double value;
-            if(json.get("attack_knockback") instanceof Double){
-                value = json.getDouble("attack_knockback");
-            }else{
-                value = Double.valueOf(json.get("attack_knockback").toString()) ;
-            }
-            maxAttackKnockbackAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxAttackSpeedAttribute = entity.getAttribute(Attribute.GENERIC_ATTACK_SPEED);
-        if (maxAttackSpeedAttribute != null && json.has("attack_speed")) {
-            Double value;
-            if(json.get("attack_speed") instanceof Double){
-                value = json.getDouble("attack_speed");
-            }else{
-                value = Double.valueOf(json.get("attack_speed").toString()) ;
-            }
-            maxAttackSpeedAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxFollowRangeAttribute = entity.getAttribute(Attribute.GENERIC_FOLLOW_RANGE);
-        if (maxFollowRangeAttribute != null && json.has("follow_range")) {
-            Double value;
-            if(json.get("follow_range") instanceof Double){
-                value = json.getDouble("follow_range");
-            }else{
-                value = Double.valueOf(json.get("follow_range").toString()) ;
-            }
-            maxFollowRangeAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxKnockbackResistanceAttribute = entity.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE);
-        if (maxKnockbackResistanceAttribute != null && json.has("knockback_resistance")) {
-            Double value;
-            if(json.get("knockback_resistance") instanceof Double){
-                value = json.getDouble("knockback_resistance");
-            }else{
-                value = Double.valueOf(json.get("knockback_resistance").toString()) ;
-            }
-            maxKnockbackResistanceAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxLuckAttribute = entity.getAttribute(Attribute.GENERIC_LUCK);
-        if (maxLuckAttribute != null && json.has("luck")) {
-            Double value;
-            if(json.get("luck") instanceof Double){
-                value = json.getDouble("luck");
-            }else{
-                value = Double.valueOf(json.get("luck").toString()) ;
-            }
-            maxLuckAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxAbsorptionAttribute = entity.getAttribute(Attribute.GENERIC_MAX_ABSORPTION);
-        if (maxAbsorptionAttribute != null && json.has("max_absorption")) {
-            Double value;
-            if(json.get("max_absorption") instanceof Double){
-                value = json.getDouble("max_absorption");
-            }else{
-                value = Double.valueOf(json.get("max_absorption").toString()) ;
-            }
-            maxAbsorptionAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxMovementSpeedAttribute = entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
-        if (maxMovementSpeedAttribute != null && json.has("movement_speed")) {
-            Double value;
-            if(json.get("movement_speed") instanceof Double){
-                value = json.getDouble("movement_speed");
-            }else{
-                value = Double.valueOf(json.get("movement_speed").toString()) ;
-            }
-            maxMovementSpeedAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxJumpStrengthAttribute = entity.getAttribute(Attribute.GENERIC_JUMP_STRENGTH);
-        if (maxJumpStrengthAttribute != null && json.has("jump_strength")) {
-            Double value;
-            if(json.get("jump_strength") instanceof Double){
-                value = json.getDouble("jump_strength");
-            }else{
-                value = Double.valueOf(json.get("jump_strength").toString()) ;
-            }
-            maxJumpStrengthAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxZombieSpawnReinforcementsAttribute = entity.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS);
-        if (maxZombieSpawnReinforcementsAttribute != null && json.has("zombie_spawn_reinforcements")) {
-            Double value;
-            if(json.get("zombie_spawn_reinforcements") instanceof Double){
-                value = json.getDouble("zombie_spawn_reinforcements");
-            }else{
-                value = Double.valueOf(json.get("zombie_spawn_reinforcements").toString());
-            }
-            maxZombieSpawnReinforcementsAttribute.setBaseValue(value);
-        }
-
-        // added in 1.20.6
-        AttributeInstance maxFallDamageMultiplierAttribute = entity.getAttribute(Attribute.GENERIC_FALL_DAMAGE_MULTIPLIER);
-        if (maxFallDamageMultiplierAttribute != null && json.has("fall_damage_multiplier")) {
-            Double value;
-            if(json.get("fall_damage_multiplier") instanceof Double){
-                value = json.getDouble("fall_damage_multiplier");
-            }else{
-                value = Double.valueOf(json.get("fall_damage_multiplier").toString());
-            }
-            maxFallDamageMultiplierAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxGravityAttribute = entity.getAttribute(Attribute.GENERIC_GRAVITY);
-        if (maxGravityAttribute != null && json.has("gravity")) {
-            Double value;
-            if(json.get("gravity") instanceof Double){
-                value = json.getDouble("gravity");
-            }else{
-                value = Double.valueOf(json.get("gravity").toString());
-            }
-            maxGravityAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxSafeFallDistanceAttribute = entity.getAttribute(Attribute.GENERIC_SAFE_FALL_DISTANCE);
-        if (maxSafeFallDistanceAttribute != null && json.has("save_fall_distance")) {
-            Double value;
-            if(json.get("save_fall_distance") instanceof Double){
-                value = json.getDouble("save_fall_distance");
-            }else{
-                value = Double.valueOf(json.get("save_fall_distance").toString());
-            }
-            maxSafeFallDistanceAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxScaleAttribute = entity.getAttribute(Attribute.GENERIC_SCALE);
-        if (maxScaleAttribute != null && json.has("scale")) {
-            Double value;
-            if(json.get("scale") instanceof Double){
-                value = json.getDouble("scale");
-            }else{
-                value = Double.valueOf(json.get("scale").toString());
-            }
-            maxScaleAttribute.setBaseValue(value);
-        }
-        AttributeInstance maxStepHeightAttribute = entity.getAttribute(Attribute.GENERIC_STEP_HEIGHT);
-        if (maxStepHeightAttribute != null && json.has("step_height")) {
-            Double value;
-            if(json.get("step_height") instanceof Double){
-                value = json.getDouble("step_height");
-            }else{
-                value = Double.valueOf(json.get("step_height").toString());
-            }
-            maxStepHeightAttribute.setBaseValue(value);
-        }
-
+        entitySetAttributeIfExists(json, Attribute.GENERIC_MAX_HEALTH ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_ARMOR ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_ARMOR_TOUGHNESS ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_ATTACK_DAMAGE ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_ATTACK_KNOCKBACK ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_ATTACK_SPEED ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_FOLLOW_RANGE ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_KNOCKBACK_RESISTANCE ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_LUCK ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_MAX_ABSORPTION ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_MOVEMENT_SPEED ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_JUMP_STRENGTH ,entity);
+        entitySetAttributeIfExists(json, Attribute.ZOMBIE_SPAWN_REINFORCEMENTS ,entity);
+        // Added in 1.20.6
+        entitySetAttributeIfExists(json, Attribute.GENERIC_FALL_DAMAGE_MULTIPLIER ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_GRAVITY ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_SAFE_FALL_DISTANCE ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_SCALE ,entity);
+        entitySetAttributeIfExists(json, Attribute.GENERIC_STEP_HEIGHT ,entity);
         // Get and Set entity`s AI status
         if(json.has("ai_status")){
             entity.setAI(json.getBoolean("ai_status"));
         }
-
         // Get and Set entity is adult or baby
         if(json.has("is_adult")){
             Ageable ageable = (Ageable) entity;
@@ -490,15 +257,12 @@ public class JsonHandler {
                 ageable.setBaby();
             }
         }
-
         // Get and Set if entity is a sheep, sheep color and sheared status
         if(json.has("sheep_color")){
             Sheep sheep = (Sheep) entity;
             sheep.setColor(DyeColor.valueOf(json.getString("sheep_color")));
             sheep.setSheared(json.getBoolean("sheep_sheared"));
         }
-
-
         // Get and Set potion effects
         JSONArray effectsJson = (JSONArray) json.get("potion_effects");
         for (Object effectObj : effectsJson) {
@@ -515,7 +279,6 @@ public class JsonHandler {
         ////return entity;
         return entity;
     }
-
     public static JSONObject parseJSONObject(String jsonString) {
         try {
             JSONObject jsonObject = new JSONObject(jsonString);
@@ -534,77 +297,25 @@ public class JsonHandler {
     private static boolean isStupidItem(ItemStack itemStack){
         return PDCHandler.hasPDCString(FangBall.plugin, itemStack, "stupiditem");
     }
-    public static JSONObject convertCompoundTagToJSONObject(CompoundTag compoundTag, JSONObject jsonObject) {
-        compoundTag.getAllKeys().forEach(key -> {
-            try {
-                jsonObject.put(key, compoundTag.get(key));
-                //Bukkit.getServer().getConsoleSender().sendMessage("Key: "+key + " / value: "+compoundTag.get(key));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        });
-        return jsonObject;
+    private static void jsonPutAttributeIfExists(JSONObject json, Attribute attribute, LivingEntity entity){
+        if(entity.getAttribute(attribute) == null)
+            return;
+        String attributeKey = attribute.getKey().getKey();
+        json.put(attributeKey, ((Double) entity.getAttribute(attribute).getValue()).doubleValue());
     }
-    public static CompoundTag convertJSONObjectToCompoundTag(JSONObject jsonObject) {
-        CompoundTag compoundTag = new CompoundTag();
-        /*jsonObject.keySet().forEach(key -> {
-            try {
-                Tag tag = Tag.
-                compoundTag.put(key, jsonObject.get(key);
-            } catch (JSONException e) {
-                e.printStackTrace();
+    private static void entitySetAttributeIfExists(JSONObject json, Attribute attribute, LivingEntity entity){
+        if(entity.getAttribute(attribute) == null)
+            return;
+        AttributeInstance attributeInstance = entity.getAttribute(Attribute.GENERIC_SCALE);
+        String attributeKey = attribute.getKey().getKey();
+        if (attributeInstance != null && json.has(attributeKey)) {
+            Double value;
+            if(json.get(attributeKey) instanceof Double){
+                value = json.getDouble(attributeKey);
+            }else{
+                value = Double.valueOf(json.get(attributeKey).toString());
             }
-        });
-        return compoundTag;*/
-        for (String key : jsonObject.keySet()) {
-            Object value = jsonObject.get(key);
-            if (value instanceof Integer) {
-                compoundTag.putInt(key, (int) value);
-                Bukkit.getServer().getConsoleSender().sendMessage("Success ->"+key+" / "+value);
-            } else if (value instanceof String) {
-                compoundTag.putString(key, (String) value);
-                Bukkit.getServer().getConsoleSender().sendMessage("Success ->"+key+" / "+value);
-            } else if (value instanceof Boolean) {
-                compoundTag.putBoolean(key, (boolean) value);
-                Bukkit.getServer().getConsoleSender().sendMessage("Success ->"+key+" / "+value);
-            } else if (value instanceof Double) {
-                compoundTag.putDouble(key, (double) value);
-                Bukkit.getServer().getConsoleSender().sendMessage("Success ->"+key+" / "+value);
-            } else if (value instanceof Long) {
-                compoundTag.putLong(key, (long) value);
-            } else if (value instanceof JSONObject) {
-                // Wenn der Wert ein weiteres JSONObject ist, rekursiv aufrufen
-                compoundTag.put(key, convertJSONObjectToCompoundTag((JSONObject) value));
-                Bukkit.getServer().getConsoleSender().sendMessage("Success ->"+key+" / "+value);
-            }
-            // Weitere Bedingungen entsprechend der Art der Werte im JSONObject hinzufügen
+            entity.getAttribute(attribute).setBaseValue(value);
         }
-
-        return compoundTag;
     }
-    private static EntityType getEntityType(JSONObject jsonObject){
-        String fullName = "";
-        if(jsonObject.get("id") instanceof String){
-            fullName = ((String) jsonObject.get("id"));
-        }else if (jsonObject.get("id") instanceof StringTag){
-            fullName = ((StringTag) jsonObject.get("id")).getAsString();
-        }
-        String rawEntityType = fullName.replace("minecraft:", "");
-        rawEntityType = rawEntityType.replace("\"", "");
-        Bukkit.getServer().getConsoleSender().sendMessage("EntityType;"+rawEntityType+";");
-        return EntityType.fromName(rawEntityType);
-    }
-    // Methode zur Serialisierung eines CompoundTag in ein byte[]
-    public static byte[] serializeCompoundTag(CompoundTag compoundTag) throws IOException {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        NbtIo.writeCompressed(compoundTag, outputStream);
-        return outputStream.toByteArray();
-    }
-
-    // Methode zur Deserialisierung eines byte[] in ein CompoundTag
-    public static CompoundTag deserializeCompoundTag(byte[] data) throws IOException {
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
-        return NbtIo.readCompressed(inputStream, new NbtAccounter(data.length, data.length));
-    }
-
 }

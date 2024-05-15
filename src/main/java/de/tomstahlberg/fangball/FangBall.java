@@ -7,6 +7,13 @@ import de.tomstahlberg.fangball.configuration.ConfigHandler;
 import de.tomstahlberg.fangball.events.InteractEntity;
 import de.tomstahlberg.fangball.events.InteractEvent;
 import de.tomstahlberg.fangball.events.PluginInitializeSSB;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -37,6 +44,7 @@ public final class FangBall extends JavaPlugin {
 
         getServer().getPluginCommand("fangball").setExecutor(new CommandsMain());
         getServer().getPluginCommand("fangball").setTabCompleter(new CommandsMainTabCompleter());
+
     }
 
     @Override
