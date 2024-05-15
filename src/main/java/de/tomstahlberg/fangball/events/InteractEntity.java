@@ -28,6 +28,8 @@ public class InteractEntity implements Listener {
         if(event.getRightClicked() instanceof Player){
             return;
         }
+        if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
+            return;
 
         //Check if player has permission
         if(!(player.hasPermission("fangball.use")) && !(player.isOp())){
@@ -81,9 +83,6 @@ public class InteractEntity implements Listener {
             }
         }
 
-
-        if(player.getInventory().getItemInMainHand() == null || player.getInventory().getItemInMainHand().getType() == Material.AIR)
-            return;
         ItemStack itemStack = event.getPlayer().getInventory().getItemInMainHand();
 
 
@@ -124,7 +123,7 @@ public class InteractEntity implements Listener {
                     }
                 }
             }
-        }, 1);
+        }, 10);
     }
     private boolean isPermitted(Player player){
         Island island = SuperiorSkyblockAPI.getIslandAt(player.getLocation());

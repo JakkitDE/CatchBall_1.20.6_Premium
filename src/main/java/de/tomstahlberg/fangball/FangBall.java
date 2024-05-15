@@ -25,7 +25,8 @@ public final class FangBall extends JavaPlugin {
     public static IslandPrivilege fangballUsePermission;
     /*
     * TODO
-    * Nothing to see here currently
+    * Set Enchanted Effect
+    * Make Lore settable in config
     * */
     @Override
     public void onEnable() {

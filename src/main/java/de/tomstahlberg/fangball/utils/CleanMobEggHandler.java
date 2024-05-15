@@ -17,16 +17,12 @@ public class CleanMobEggHandler {
         itemStack.setAmount(amount);
         PDCHandler.setPDCString(FangBall.plugin, itemStack, "MobEggType", "Single");
         ItemMeta itemMeta = itemStack.getItemMeta();
-        Component textComponent = Component.text("§3§lFangball §7(§2Einweg§7)");
-        itemMeta.displayName(textComponent);
-
-        List<Component> components = new ArrayList<>();
-        components.add(Component.text("§2Verwende ihn mit Bedacht, du kannst"));
-        components.add(Component.text("§2ihn nur einmalig verwenden, um ein Mob"));
-        components.add(Component.text("§2einzufangen."));
-        itemMeta.lore(components);
-
+        String itemName = FangBall.configHandler.getSingleEmptyName();
+        itemMeta.displayName(Component.text(itemName));
         itemStack.setItemMeta(itemMeta);
+        List<String> lore = FangBall.configHandler.getSingleEmptyLore();
+        ComponentHandler.setLore(itemStack, lore);
+
         return itemStack;
     }
 
@@ -35,16 +31,12 @@ public class CleanMobEggHandler {
         itemStack.setAmount(amount);
         PDCHandler.setPDCString(FangBall.plugin, itemStack, "MobEggType", "Multi");
         ItemMeta itemMeta = itemStack.getItemMeta();
-        Component textComponent = Component.text("§3§lFangball §7(§6Mehrweg§7)");
-        itemMeta.displayName(textComponent);
-
-        List<Component> components = new ArrayList<>();
-        components.add(Component.text("§2Verwende ihn ganz nach eigenem Belieben. Du kannst"));
-        components.add(Component.text("§2ihn so oft verwenden, wie du willst, um ein Mob"));
-        components.add(Component.text("§2einzufangen."));
-        itemMeta.lore(components);
-
+        String itemName = FangBall.configHandler.getMultiEmptyName();
+        itemMeta.displayName(Component.text(itemName));
         itemStack.setItemMeta(itemMeta);
+        List<String> lore = FangBall.configHandler.getMultiEmptyLore();
+        ComponentHandler.setLore(itemStack, lore);
+
         return itemStack;
     }
     public static boolean isMobEggItem(ItemStack itemStack){

@@ -39,6 +39,30 @@ public class ConfigHandler {
         yamlConfiguration.set("sounds.noPermissionSound", "ENTITY_VILLAGER_NO");
         yamlConfiguration.set("hooks.SuperiorSkyBlock2.enabled",false);
         yamlConfiguration.set("hooks.SuperiorSkyBlock2.onlyUseOnIslandIfAllowed",false);
+        List<String> singleEmptyLoreList = new ArrayList<>();
+        singleEmptyLoreList.add("§eThis is a empty single use fangball.");
+        List<String> singleFilledLoreList = new ArrayList<>();
+        singleFilledLoreList.add("§eThis is a filled single use fangball.");
+        singleFilledLoreList.add("§eType %type%");
+        singleFilledLoreList.add("§eNickname %nick%");
+        List<String> multiEmptyLoreList = new ArrayList<>();
+        multiEmptyLoreList.add("§eThis is a empty multi use fangball.");
+        List<String> multiFilledLoreList = new ArrayList<>();
+        multiFilledLoreList.add("§eThis is a filled multi use fangball.");
+        multiFilledLoreList.add("§eType %type%");
+        multiFilledLoreList.add("§eNickname %nick%");
+        yamlConfiguration.set("lore.singleEmpty", singleEmptyLoreList);
+        yamlConfiguration.set("lore.singleFilled", singleFilledLoreList);
+        yamlConfiguration.set("lore.multiEmpty", multiEmptyLoreList);
+        yamlConfiguration.set("lore.multiFilled", multiFilledLoreList);
+        yamlConfiguration.set("name.singleEmpty", "§eEmpty Single Use");
+        yamlConfiguration.set("name.singleFilled", "§eFilled Single Use (%type%)");
+        yamlConfiguration.set("name.multiEmpty", "§eEmpty Multi Use");
+        yamlConfiguration.set("name.multiFilled", "§eFilled Multi Use (%type%)");
+        yamlConfiguration.set("nick.noNick", "§c/");
+        yamlConfiguration.set("shining.filledSingle", true);
+        yamlConfiguration.set("shining.filledMulti", true);
+
 
         List<String> allowedWorlds = new ArrayList<>();
         allowedWorlds.add("world");
@@ -157,5 +181,38 @@ public class ConfigHandler {
     }
     public void disableSuperiorSkyblockHook(){
         this.configuration.set("hooks.SuperiorSkyBlock2.enabled",false);
+    }
+    public List<String> getSingleEmptyLore(){
+        return this.configuration.getStringList("lore.singleEmpty");
+    }
+    public List<String> getSingleFilledLore(){
+        return this.configuration.getStringList("lore.singleFilled");
+    }
+    public List<String> getMultiEmptyLore(){
+        return this.configuration.getStringList("lore.multiEmpty");
+    }
+    public List<String> getMultiFilledLore(){
+        return this.configuration.getStringList("lore.multiFilled");
+    }
+    public String getSingleEmptyName(){
+        return this.configuration.getString("name.singleEmpty");
+    }
+    public String getSingleFilledName(){
+        return this.configuration.getString("name.singleFilled");
+    }
+    public String getMultiEmptyName(){
+        return this.configuration.getString("name.multiEmpty");
+    }
+    public String getMultiFilledName(){
+        return this.configuration.getString("name.multiFilled");
+    }
+    public String getNoNick(){
+        return this.configuration.getString("nick.noNick");
+    }
+    public boolean getShiningSingle(){
+        return this.configuration.getBoolean("shining.filledSingle");
+    }
+    public boolean getShiningMulti(){
+        return this.configuration.getBoolean("shining.filledMulti");
     }
 }
