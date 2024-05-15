@@ -71,6 +71,11 @@ public class InteractEvent implements Listener {
                         }
                         return;
                     }
+                }else{
+                    // If player is not on island but hook enabled
+                    if(FangBall.configHandler.isSuperiorSkyBlockUsingOnlyOnIslandsIfAllowedEnabled()){
+                        return;
+                    }
                 }
             }
 
