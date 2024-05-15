@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -77,8 +78,13 @@ public class ConfigHandler {
             return;
         }
         YamlConfiguration yamlConfiguration = new YamlConfiguration();
-        yamlConfiguration.set("prefix","§6§lFang§3§lBall §8x");
+        yamlConfiguration.set("prefix","§6§lFang§3§lBall §8x ");
         yamlConfiguration.set("messages.mobCatched","§2You catched a mob.");
+        yamlConfiguration.set("messages.playerNotOnline","§7The player §e%player% §7is not online.");
+        yamlConfiguration.set("messages.singleName","§fSingle");
+        yamlConfiguration.set("messages.multiName","§5Multi");
+        yamlConfiguration.set("messages.receivedSingle","§2You have received §e%amount% §2x §f%type% §2fangballs.");
+        yamlConfiguration.set("messages.receivedMulti","§2You have received §e%amount% §2x §5%type% §2fangballs.");
         yamlConfiguration.set("messages.mobReleased","§2You released a mob.");
         yamlConfiguration.set("messages.alreadyHasMob","§7This fangball already has a mob.");
         yamlConfiguration.set("messages.notInsideIsland","§7You are not allowed to use fangballs outside of an island.");
@@ -178,6 +184,29 @@ public class ConfigHandler {
     }
     public String getNoPermissionMessage(){
         return this.language.getString("prefix")+this.language.getString("messages.noPermission");
+    }
+    public String getReceivedSingleMessage(String type, int amount){
+        String receiveMessage = this.language.getString("messages.receivedSingle");
+        receiveMessage = receiveMessage.replace("%amount%", ""+amount);
+        receiveMessage = receiveMessage.replace("%type%", type);
+        return this.language.getString("prefix")+receiveMessage;
+    }
+    public String getReceivedMultiMessage(String type, int amount){
+        String receiveMessage = this.language.getString("messages.receivedMulti");
+        receiveMessage = receiveMessage.replace("%amount%", ""+amount);
+        receiveMessage = receiveMessage.replace("%type%", type);
+        return this.language.getString("prefix")+receiveMessage;
+    }
+    public String getPlayerNotOnlineMessage(String player){
+        String message = this.language.getString("messages.playerNotOnline");
+        message = message.replace("%player%", player);
+        return this.language.getString("prefix")+message;
+    }
+    public String getSingleName(){
+        return this.language.getString("messages.singleName");
+    }
+    public String getMultiName(){
+        return this.language.getString("messages.multiName");
     }
     public void disableSuperiorSkyblockHook(){
         this.configuration.set("hooks.SuperiorSkyBlock2.enabled",false);

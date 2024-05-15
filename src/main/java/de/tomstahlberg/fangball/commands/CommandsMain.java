@@ -1,5 +1,6 @@
 package de.tomstahlberg.fangball.commands;
 
+import de.tomstahlberg.fangball.FangBall;
 import de.tomstahlberg.fangball.utils.CleanMobEggHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -18,27 +19,23 @@ public class CommandsMain implements CommandExecutor {
             if(strings.length == 4){
                 if(strings[0].equalsIgnoreCase("give")){
 
+                    if(Bukkit.getPlayer(strings[1]) == null){
+                        commandSender.sendMessage(FangBall.configHandler.getPlayerNotOnlineMessage(strings[1]));
+                        return true;
+                    }
                     Player player = Bukkit.getPlayer(strings[1]);
                     Integer amount = Integer.valueOf(strings[3]);
                     if(strings[2].equalsIgnoreCase("single")){
                         for(int i = 0;i<amount;i++){
                             player.getInventory().addItem(CleanMobEggHandler.getSingleMobEggItem(1));
                         }
-                        if(amount >1){
-                            player.sendMessage("§6§lGolden§3§lSky §8x §2Du hast soeben "+amount+" Einweg Fangbälle erhalten.");
-                        }else{
-                            player.sendMessage("§6§lGolden§3§lSky §8x §2Du hast soeben "+amount+" Einweg Fangball erhalten.");
-                        }
+                        player.sendMessage(FangBall.configHandler.getReceivedSingleMessage(FangBall.configHandler.getSingleName(),amount));
 
                     }else if(strings[2].equalsIgnoreCase("multi")){
                         for(int i = 0;i<amount;i++){
                             player.getInventory().addItem(CleanMobEggHandler.getMultiMobEggItem(1));
                         }
-                        if(amount >1){
-                            player.sendMessage("§6§lGolden§3§lSky §8x §2Du hast soeben "+amount+" §5Mehrweg §2Fangbälle erhalten.");
-                        }else{
-                            player.sendMessage("§6§lGolden§3§lSky §8x §2Du hast soeben "+amount+" §5Mehrweg §2Fangball erhalten.");
-                        }
+                        player.sendMessage(FangBall.configHandler.getReceivedMultiMessage(FangBall.configHandler.getMultiName(),amount));
                     }else{
                         commandSender.sendMessage("§6§lGolden§3§lSky §8x §cFalsches Syntax!");
                         showHelp(player);
