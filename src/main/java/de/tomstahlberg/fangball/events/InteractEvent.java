@@ -73,7 +73,15 @@ public class InteractEvent implements Listener {
                 }else{
                     // If player is not on island but hook enabled
                     if(FangBall.configHandler.isSuperiorSkyBlockUsingOnlyOnIslandsIfAllowedEnabled()){
-                        return;
+                        if(!(player.hasPermission("fangball.use.bypass.insideisland")) && !(player.isOp())){
+                            if(!FangBall.configHandler.getNotInsideIslandMessage().equalsIgnoreCase(""))
+                                player.sendMessage(FangBall.configHandler.getNotInsideIslandMessage());
+                            if(FangBall.configHandler.noPermissionSoundEnabled()){
+                                if(FangBall.configHandler.getNoPermissionSound() != null)
+                                    player.playSound(player.getLocation(),FangBall.configHandler.getNoPermissionSound(), 1.0f, 1.0f);
+                            }
+                            return;
+                        }
                     }
                 }
             }

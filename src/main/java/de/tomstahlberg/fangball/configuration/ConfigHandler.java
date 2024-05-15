@@ -57,6 +57,7 @@ public class ConfigHandler {
         yamlConfiguration.set("messages.mobCatched","§2You catched a mob.");
         yamlConfiguration.set("messages.mobReleased","§2You released a mob.");
         yamlConfiguration.set("messages.alreadyHasMob","§7This fangball already has a mob.");
+        yamlConfiguration.set("messages.notInsideIsland","§7You are not allowed to use fangballs outside of an island.");
         yamlConfiguration.set("messages.notInAllowedWorld","§7You are not allowed to use fangballs in this world.");
         yamlConfiguration.set("messages.noPermissionOnIsland","§7You are not allowed to use fangballs on this island.");
         yamlConfiguration.set("messages.noPermission","§7You are not allowed to use fangballs.");
@@ -141,6 +142,9 @@ public class ConfigHandler {
     }
     public String getAlreadyFilledMessage(){
         return this.language.getString("prefix")+this.language.getString("messages.alreadyHasMob");
+    }
+    public String getNotInsideIslandMessage(){
+        return this.language.getString("prefix")+this.language.getString("messages.notInsideIsland");
     }
     public String getNotAllowedWorldMessage(){
         return this.language.getString("prefix")+this.language.getString("messages.notInAllowedWorld");
