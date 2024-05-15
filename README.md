@@ -18,6 +18,9 @@ A simple plugin to able users to catch and release mobs using single- or multius
 
 2) Permission `fangball.use.world.bypass`
  Description `Allows a player bypassing world whitelist`
+
+3) Permission `fangball.use.bypass.insideisland`
+ Description `Allowed a player bypassing the rule not to be allowed using fangballs outside an island`
  
 ## Hooks
 ### SuperiorSkyblock2
