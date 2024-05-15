@@ -5,6 +5,7 @@ import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import de.tomstahlberg.fangball.FangBall;
 import de.tomstahlberg.fangball.utils.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -78,8 +79,9 @@ public class InteractEvent implements Listener {
             String jsonString = PDCHandler.getPDCString(FangBall.plugin, player.getInventory().getItemInMainHand(), "mobdata");
             JSONObject jsonObject = JsonHandler.parseJSONObject(jsonString);
 
-            Location location = new Location(player.getLocation().getWorld(),event.getClickedBlock().getX(), event.getClickedBlock().getY()+1.0, event.getClickedBlock().getZ());
+            Location location = event.getInteractionPoint();
             LivingEntity entity = JsonHandler.deserializeLivingEntity(jsonObject, location, player.getLocation().getWorld(), FangBall.plugin);
+
             if(PDCHandler.hasPDCBytes(FangBall.plugin, player.getInventory().getItemInMainHand(), "pdc")){
                 byte[] bytes = PDCHandler.getPDCBytes(FangBall.plugin, player.getInventory().getItemInMainHand(), "pdc");
                 entity.getPersistentDataContainer().readFromBytes(bytes);

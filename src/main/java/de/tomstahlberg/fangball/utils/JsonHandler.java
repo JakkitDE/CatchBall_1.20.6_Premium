@@ -32,7 +32,6 @@ public class JsonHandler {
 
         // Some basic properties
         json.put("type", entity.getType().name());
-        json.put("uuid", entity.getUniqueId().toString());
 
         // If entity is tamed
         if(entity instanceof Tameable){
@@ -207,10 +206,6 @@ public class JsonHandler {
         }
         json.put("potion_effects", effectsJson);
 
-        CraftEntity craftEntity = (CraftEntity) entity;
-        net.minecraft.world.entity.Entity nmsEntity = craftEntity.getHandle();
-        CompoundTag compoundTag = new CompoundTag();
-        nmsEntity.save(compoundTag);
         // Save JSON
         return json;
     }
@@ -218,6 +213,8 @@ public class JsonHandler {
     public static LivingEntity deserializeLivingEntity(JSONObject json, Location location, World world, Plugin plugin) throws IOException {
         // Create and spawn entity
         LivingEntity entity = (LivingEntity) world.spawnEntity(location, EntityType.valueOf((String) json.get("type")));
+
+
 
         // Get and Set entity is tamed
         if(json.has("is_tamed")){

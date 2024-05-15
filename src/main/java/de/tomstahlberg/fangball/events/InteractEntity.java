@@ -87,14 +87,10 @@ public class InteractEntity implements Listener {
                 event.setCancelled(true);
             }else{
                 JSONObject jsonObject = JsonHandler.serializeLivingEntity((LivingEntity) event.getRightClicked());
-                //Bukkit.getServer().getConsoleSender().sendMessage("Nun folgt das JSON Objekt in InteractEntity...");
-                //Bukkit.getServer().getConsoleSender().sendMessage(jsonObject.toString());
                 MobEggCreator mobEggCreator = new MobEggCreator(jsonObject, player.getInventory().getItemInMainHand(), FangBall.plugin, event.getRightClicked().getPersistentDataContainer());
                 ItemStack mobEggItem = mobEggCreator.getMobEggItem();
                 InventoryHandler.removeOneItem(player.getInventory().getItemInMainHand());
-                //player.getInventory().addItem(mobEggItem);
                 handleItemGive(player, mobEggItem);
-
                 event.getRightClicked().remove();
                 if(!(FangBall.configHandler.getCatchedMessage().equalsIgnoreCase(""))){
                     player.sendMessage(FangBall.configHandler.getCatchedMessage());
