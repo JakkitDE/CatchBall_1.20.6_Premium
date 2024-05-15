@@ -12,6 +12,7 @@ import org.bukkit.plugin.Plugin;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MobEggCreator {
@@ -33,61 +34,44 @@ public class MobEggCreator {
     private void createMobEggItem() throws IOException {
         ItemStack itemStack = new ItemStack(this.mobbEggItem);
         // Set item name
+        String itemName;
         if(CleanMobEggHandler.isMultiMobEggItem(FangBall.plugin,itemStack)){
-            String itemName = FangBall.configHandler.getMultiFilledName();
-            itemName = itemName.replace("%type%", (String) jsonObject.get("type"));
-            itemName = itemName.replace("_", " ");
-            if(jsonObject.has("display_name")){
-                itemName = itemName.replace("%nick%", (String) jsonObject.get("display_name"));
-            }else{
-                itemName = itemName.replace("%nick%", FangBall.configHandler.getNoNick());
-            }
-            ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.displayName(Component.text(itemName));
-            itemStack.setItemMeta(itemMeta);
+            itemName = FangBall.configHandler.getMultiFilledName();
+
         }else{
-            String itemName = FangBall.configHandler.getSingleFilledName();
-            itemName = itemName.replace("%type%", (String) jsonObject.get("type"));
-            itemName = itemName.replace("_", " ");
-            if(jsonObject.has("display_name")){
-                itemName = itemName.replace("%nick%", (String) jsonObject.get("display_name"));
-            }else{
-                itemName = itemName.replace("%nick%", FangBall.configHandler.getNoNick());
-            }
-            ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.displayName(Component.text(itemName));
-            itemStack.setItemMeta(itemMeta);
+            itemName = FangBall.configHandler.getSingleFilledName();
         }
+        itemName = itemName.replace("%type%", (String) jsonObject.get("type"));
+        itemName = itemName.replace("_", " ");
+        if(jsonObject.has("display_name")){
+            itemName = itemName.replace("%nick%", (String) jsonObject.get("display_name"));
+        }else{
+            itemName = itemName.replace("%nick%", FangBall.configHandler.getNoNick());
+        }
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.displayName(Component.text(itemName));
+        itemStack.setItemMeta(itemMeta);
+
         // Set item lore
+        List<String> lore;
         if(CleanMobEggHandler.isMultiMobEggItem(FangBall.plugin,itemStack)){
-            List<String> lore = FangBall.configHandler.getMultiFilledLore();
-            for(int i = 0;i<lore.size();i++){
-                String loreLine = lore.get(i);
-                loreLine = loreLine.replace("%type%", (String) jsonObject.get("type"));
-                loreLine = loreLine.replace("_", " ");
-                if(jsonObject.has("display_name")){
-                    loreLine = loreLine.replace("%nick%", (String) jsonObject.get("display_name"));
-                }else{
-                    loreLine = loreLine.replace("%nick%", FangBall.configHandler.getNoNick());
-                }
-                lore.set(i, loreLine);
-            }
-            ComponentHandler.setLore(itemStack, lore);
+            lore = FangBall.configHandler.getMultiFilledLore();
         }else{
-            List<String> lore = FangBall.configHandler.getSingleFilledLore();
-            for(int i = 0;i<lore.size();i++){
-                String loreLine = lore.get(i);
-                loreLine = loreLine.replace("%type%", (String) jsonObject.get("type"));
-                loreLine = loreLine.replace("_", " ");
-                if(jsonObject.has("display_name")){
-                    loreLine = loreLine.replace("%nick%", (String) jsonObject.get("display_name"));
-                }else{
-                    loreLine = loreLine.replace("%nick%", FangBall.configHandler.getNoNick());
-                }
-                lore.set(i, loreLine);
-            }
-            ComponentHandler.setLore(itemStack, lore);
+            lore = FangBall.configHandler.getSingleFilledLore();
         }
+        for(int i = 0;i<lore.size();i++){
+            String loreLine = lore.get(i);
+            loreLine = loreLine.replace("%type%", (String) jsonObject.get("type"));
+            loreLine = loreLine.replace("_", " ");
+            if(jsonObject.has("display_name")){
+                loreLine = loreLine.replace("%nick%", (String) jsonObject.get("display_name"));
+            }else{
+                loreLine = loreLine.replace("%nick%", FangBall.configHandler.getNoNick());
+            }
+            lore.set(i, loreLine);
+        }
+        ComponentHandler.setLore(itemStack, lore);
+
         // Set item shining
         if(CleanMobEggHandler.isMultiMobEggItem(FangBall.plugin,itemStack)){
             InventoryHandler.setShining(itemStack, FangBall.configHandler.getShiningMulti());
