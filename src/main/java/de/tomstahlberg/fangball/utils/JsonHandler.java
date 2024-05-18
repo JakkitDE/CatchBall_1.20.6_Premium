@@ -23,6 +23,8 @@ public class JsonHandler {
         Entity nmsEntity = ((CraftEntity) entity).getHandle();
         CompoundTag compoundTag = new CompoundTag();
         nmsEntity.save(compoundTag);
+        compoundTag.remove("UUID");
+
         byte[] bytes = NBTSerialization.serializeNBT(compoundTag);
         String encoded = Base64.getEncoder().encodeToString(bytes);
         json.put("nbt", encoded);
