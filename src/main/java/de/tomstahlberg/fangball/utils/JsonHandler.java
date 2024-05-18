@@ -23,18 +23,21 @@ public class JsonHandler {
         Entity nmsEntity = ((CraftEntity) entity).getHandle();
         CompoundTag compoundTag = new CompoundTag();
         nmsEntity.save(compoundTag);
+        // remove UUID from NBT due to warnings printed into console which may lead to errors
         compoundTag.remove("UUID");
-
         byte[] bytes = NBTSerialization.serializeNBT(compoundTag);
         String encoded = Base64.getEncoder().encodeToString(bytes);
         json.put("nbt", encoded);
         json.put("type", entity.getType().name());
+        if(ComponentHandler.getDisplayName(entity) != null)
+            json.put("display_name", ComponentHandler.getDisplayName(entity));
         return json;
     }
 
     public static LivingEntity deserializeLivingEntity(JSONObject json, Location location, World world, Plugin plugin) throws IOException {
         EntityType entityType = EntityType.valueOf(json.getString("type"));
         LivingEntity entity = (LivingEntity) world.spawnEntity(location, entityType);
+
         Entity nmsEntity = ((CraftEntity) entity).getHandle();
         CompoundTag compoundTag = new CompoundTag();
         String encoded = json.getString("nbt");
@@ -42,6 +45,7 @@ public class JsonHandler {
         compoundTag = NBTDeserialization.deserializeNBT(bytes);
         nmsEntity.load(compoundTag);
         entity.teleport(location);
+
         return entity;
     }
     public static JSONObject parseJSONObject(String jsonString) {

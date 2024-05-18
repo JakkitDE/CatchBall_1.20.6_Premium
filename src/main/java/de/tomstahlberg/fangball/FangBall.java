@@ -25,8 +25,7 @@ public final class FangBall extends JavaPlugin {
     public static IslandPrivilege fangballUsePermission;
     /*
     * TODO
-    *  Fix Warning
-    * [02:56:58 WARN]: [EntityLookup] Failed to remove entity Villager['Librarian'/272, uuid='c3bb607b-8ec0-456e-b6f7-a6c2141120bf', l='ServerLevel[SuperiorWorld]', x=607.82, y=100.00, z=-0.50, cpos=[37, -1], tl=17218, v=false, removed=UNLOADED_TO_CHUNK] by uuid, current entity mapped: null
+    *  - No known issues / bugs / errors
     * */
     @Override
     public void onEnable() {
