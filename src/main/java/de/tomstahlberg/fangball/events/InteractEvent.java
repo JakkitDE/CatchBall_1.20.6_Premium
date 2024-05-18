@@ -3,22 +3,28 @@ package de.tomstahlberg.fangball.events;
 import com.bgsoftware.superiorskyblock.api.SuperiorSkyblockAPI;
 import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
+import com.google.gson.Gson;
 import de.tomstahlberg.fangball.FangBall;
 import de.tomstahlberg.fangball.utils.*;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Tameable;
+import de.tomstahlberg.fangball.utils.nbt.NBTDeserialization;
+import de.tomstahlberg.fangball.utils.nbt.NBTSerialization;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import org.bukkit.*;
+import org.bukkit.craftbukkit.entity.CraftEntity;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.MerchantRecipe;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InteractEvent implements Listener {
     @EventHandler
@@ -132,5 +138,25 @@ public class InteractEvent implements Listener {
         Island island = SuperiorSkyblockAPI.getIslandAt(player.getLocation());
         SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player);
         return island.hasPermission(superiorPlayer, FangBall.fangballUsePermission);
+    }
+
+    //@EventHandler
+    public void onHurt(EntityDamageByEntityEvent event) throws IOException {
+        event.setCancelled(true);
+        if(!(event.getEntity() instanceof LivingEntity))
+            return;
+        LivingEntity entity = (LivingEntity) event.getEntity();
+        Entity nmsEntity = ((CraftEntity) entity).getHandle();
+        CompoundTag compoundTag = new CompoundTag();
+        nmsEntity.save(compoundTag);
+        entity.remove();
+
+        byte[] nbtBytes = NBTSerialization.serializeNBT(compoundTag);
+
+        World world = event.getEntity().getLocation().getWorld();
+        LivingEntity living = (LivingEntity) world.spawnEntity(event.getDamager().getLocation(), event.getEntity().getType());
+        Entity newNmsEntity = ((CraftEntity) living).getHandle();
+        newNmsEntity.load(NBTDeserialization.deserializeNBT(nbtBytes));
+
     }
 }
