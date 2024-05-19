@@ -1,11 +1,12 @@
 
 # FangBall
 
-A simple plugin to able users to catch and release mobs using single- or multiuseable fangballs. Custom NBT data are not supported. Only PaperMC is supported. No support for Spigot, Bukkit or any other.
-!! Paper >= 1.20.6, Java >= 21 !!
+A simple plugin to able users to catch and release mobs using single- or multiuseable fangballs with full NBT support. Whether a donkey with a chest or a villager with trades, everything gets saved. 
 
-
-
+## Requirements
+PaperMC: 1.20.6+
+(FoliaMC Support planned)
+Java 21+
 
 ## Commands
 1) Command `/fangball give <player> <multi|single> <amount>`
