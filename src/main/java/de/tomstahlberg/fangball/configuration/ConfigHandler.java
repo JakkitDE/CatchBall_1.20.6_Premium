@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -85,12 +86,14 @@ public class ConfigHandler {
         yamlConfiguration.set("messages.multiName","§5Multi");
         yamlConfiguration.set("messages.receivedSingle","§2You have received §e%amount% §2x §f%type% §2fangballs.");
         yamlConfiguration.set("messages.receivedMulti","§2You have received §e%amount% §2x §5%type% §2fangballs.");
+        yamlConfiguration.set("messages.sent","§2Fangballs §7(§e%amount% §7x §e%type%§7) §2successfully have been sent to §e%player%§2.");
         yamlConfiguration.set("messages.mobReleased","§2You released a mob.");
         yamlConfiguration.set("messages.alreadyHasMob","§7This fangball already has a mob.");
         yamlConfiguration.set("messages.notInsideIsland","§7You are not allowed to use fangballs outside of an island.");
         yamlConfiguration.set("messages.notInAllowedWorld","§7You are not allowed to use fangballs in this world.");
         yamlConfiguration.set("messages.noPermissionOnIsland","§7You are not allowed to use fangballs on this island.");
         yamlConfiguration.set("messages.noPermission","§7You are not allowed to use fangballs.");
+        yamlConfiguration.set("messages.noPermissionEntity","§7You are not allowed to use fangballs of type %type%.");
         this.language = yamlConfiguration;
         yamlConfiguration.save(this.languageFile);
     }
@@ -185,6 +188,11 @@ public class ConfigHandler {
     public String getNoPermissionMessage(){
         return this.language.getString("prefix")+this.language.getString("messages.noPermission");
     }
+    public String getNoPermissionEntityMessage(Entity entity){
+        String message = this.language.getString("messages.noPermissionEntity");
+        message = message.replace("%type%", entity.getType().name());
+        return message;
+    }
     public String getReceivedSingleMessage(String type, int amount){
         String receiveMessage = this.language.getString("messages.receivedSingle");
         receiveMessage = receiveMessage.replace("%amount%", ""+amount);
@@ -201,6 +209,14 @@ public class ConfigHandler {
         String message = this.language.getString("messages.playerNotOnline");
         message = message.replace("%player%", player);
         return this.language.getString("prefix")+message;
+    }
+    public String getSentMessage(Player player, Integer amount, String type){
+        String playerName = player.getName();
+        String message = this.language.getString("messages.sent");
+        message = message.replace("%player%", playerName);
+        message = message.replace("%amount%", amount.toString());
+        message = message.replace("%type%", type);
+        return message;
     }
     public String getSingleName(){
         return this.language.getString("messages.singleName");

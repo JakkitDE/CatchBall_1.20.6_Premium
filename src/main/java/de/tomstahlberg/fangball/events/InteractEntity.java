@@ -40,6 +40,15 @@ public class InteractEntity implements Listener {
             }
             return;
         }
+        PermissionHandler permissionHandler = new PermissionHandler((LivingEntity) event.getRightClicked(), player);
+        if(!permissionHandler.isPermitted()){
+            if(!FangBall.configHandler.getNoPermissionEntityMessage(event.getRightClicked()).equalsIgnoreCase(""))
+                player.sendMessage(FangBall.configHandler.getNoPermissionEntityMessage(event.getRightClicked()));
+            if(FangBall.configHandler.noPermissionSoundEnabled()){
+                player.playSound(player.getLocation(),FangBall.configHandler.getNoPermissionSound(), 1.0f, 1.0f);
+            }
+            return;
+        }
 
         //Check if in allowed world
         if(!FangBall.configHandler.getAllowedWorlds().contains(player.getWorld())){

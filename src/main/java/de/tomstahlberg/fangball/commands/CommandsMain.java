@@ -1,6 +1,7 @@
 package de.tomstahlberg.fangball.commands;
 
 import de.tomstahlberg.fangball.FangBall;
+import de.tomstahlberg.fangball.configuration.ConfigHandler;
 import de.tomstahlberg.fangball.utils.CleanMobEggHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -30,12 +31,17 @@ public class CommandsMain implements CommandExecutor {
                             player.getInventory().addItem(CleanMobEggHandler.getSingleMobEggItem(1));
                         }
                         player.sendMessage(FangBall.configHandler.getReceivedSingleMessage(FangBall.configHandler.getSingleName(),amount));
-
+                        if(Bukkit.getPlayer(strings[1]) != commandSender){
+                            commandSender.sendMessage(FangBall.configHandler.getSentMessage(Bukkit.getPlayer(strings[1]), amount, FangBall.configHandler.getSingleName()));
+                        }
                     }else if(strings[2].equalsIgnoreCase("multi")){
                         for(int i = 0;i<amount;i++){
                             player.getInventory().addItem(CleanMobEggHandler.getMultiMobEggItem(1));
                         }
                         player.sendMessage(FangBall.configHandler.getReceivedMultiMessage(FangBall.configHandler.getMultiName(),amount));
+                        if(Bukkit.getPlayer(strings[1]) != commandSender){
+                            commandSender.sendMessage(FangBall.configHandler.getSentMessage(Bukkit.getPlayer(strings[1]), amount, FangBall.configHandler.getMultiName()));
+                        }
                     }else{
                         commandSender.sendMessage("§6§lGolden§3§lSky §8x §cFalsches Syntax!");
                         showHelp(player);

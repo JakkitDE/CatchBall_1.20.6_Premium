@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.util.*;
 
+@Deprecated
 public class JsonHandler_Old {
     public static JSONObject serializeLivingEntity(LivingEntity entity) throws IOException {
         // Create new JSON

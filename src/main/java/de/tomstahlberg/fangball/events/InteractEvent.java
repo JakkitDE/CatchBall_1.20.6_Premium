@@ -5,6 +5,7 @@ import com.bgsoftware.superiorskyblock.api.island.Island;
 import com.bgsoftware.superiorskyblock.api.wrappers.SuperiorPlayer;
 import com.google.gson.Gson;
 import de.tomstahlberg.fangball.FangBall;
+import de.tomstahlberg.fangball.api.FangballAPI;
 import de.tomstahlberg.fangball.utils.*;
 import de.tomstahlberg.fangball.utils.nbt.NBTDeserialization;
 import de.tomstahlberg.fangball.utils.nbt.NBTSerialization;
@@ -49,6 +50,7 @@ public class InteractEvent implements Listener {
                 }
                 return;
             }
+
             //Check if in allowed world
             if(!player.hasPermission("fangball.use.world.bypass") || !player.isOp()){
                 if(!FangBall.configHandler.getAllowedWorlds().contains(player.getWorld())){
@@ -100,6 +102,17 @@ public class InteractEvent implements Listener {
             Location location = event.getInteractionPoint();
             LivingEntity entity = JsonHandler.deserializeLivingEntity(jsonObject, location, player.getLocation().getWorld(), FangBall.plugin);
 
+            PermissionHandler permissionHandler = new PermissionHandler(entity, player);
+            if(!permissionHandler.isPermitted()){
+                if(!FangBall.configHandler.getNoPermissionEntityMessage(entity).equalsIgnoreCase(""))
+                    player.sendMessage(FangBall.configHandler.getNoPermissionEntityMessage(entity));
+                if(FangBall.configHandler.noPermissionSoundEnabled()){
+                    player.playSound(player.getLocation(),FangBall.configHandler.getNoPermissionSound(), 1.0f, 1.0f);
+                }
+                entity.remove();
+                return;
+            }
+
             if(PDCHandler.hasPDCBytes(FangBall.plugin, player.getInventory().getItemInMainHand(), "pdc")){
                 byte[] bytes = PDCHandler.getPDCBytes(FangBall.plugin, player.getInventory().getItemInMainHand(), "pdc");
                 entity.getPersistentDataContainer().readFromBytes(bytes);
@@ -138,25 +151,5 @@ public class InteractEvent implements Listener {
         Island island = SuperiorSkyblockAPI.getIslandAt(player.getLocation());
         SuperiorPlayer superiorPlayer = SuperiorSkyblockAPI.getPlayer(player);
         return island.hasPermission(superiorPlayer, FangBall.fangballUsePermission);
-    }
-
-    //@EventHandler
-    public void onHurt(EntityDamageByEntityEvent event) throws IOException {
-        event.setCancelled(true);
-        if(!(event.getEntity() instanceof LivingEntity))
-            return;
-        LivingEntity entity = (LivingEntity) event.getEntity();
-        Entity nmsEntity = ((CraftEntity) entity).getHandle();
-        CompoundTag compoundTag = new CompoundTag();
-        nmsEntity.save(compoundTag);
-        entity.remove();
-
-        byte[] nbtBytes = NBTSerialization.serializeNBT(compoundTag);
-
-        World world = event.getEntity().getLocation().getWorld();
-        LivingEntity living = (LivingEntity) world.spawnEntity(event.getDamager().getLocation(), event.getEntity().getType());
-        Entity newNmsEntity = ((CraftEntity) living).getHandle();
-        newNmsEntity.load(NBTDeserialization.deserializeNBT(nbtBytes));
-
     }
 }
