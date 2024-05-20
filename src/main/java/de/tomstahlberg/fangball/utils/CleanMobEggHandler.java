@@ -13,7 +13,7 @@ import java.util.List;
 public class CleanMobEggHandler {
 
     public static ItemStack getSingleMobEggItem(int amount){
-        ItemStack itemStack = new ItemStack(Material.MAGMA_CREAM);
+        ItemStack itemStack = new ItemStack(FangBall.configHandler.getMaterialSingle());
         itemStack.setAmount(amount);
         PDCHandler.setPDCString(FangBall.plugin, itemStack, "MobEggType", "Single");
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -27,7 +27,7 @@ public class CleanMobEggHandler {
     }
 
     public static ItemStack getMultiMobEggItem(int amount){
-        ItemStack itemStack = new ItemStack(Material.MAGMA_CREAM);
+        ItemStack itemStack = new ItemStack(FangBall.configHandler.getMaterialMulti());
         itemStack.setAmount(amount);
         PDCHandler.setPDCString(FangBall.plugin, itemStack, "MobEggType", "Multi");
         ItemMeta itemMeta = itemStack.getItemMeta();

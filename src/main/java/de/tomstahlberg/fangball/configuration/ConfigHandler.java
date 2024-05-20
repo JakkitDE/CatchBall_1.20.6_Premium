@@ -1,6 +1,7 @@
 package de.tomstahlberg.fangball.configuration;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -36,6 +37,8 @@ public class ConfigHandler {
             return;
         }
         YamlConfiguration yamlConfiguration = new YamlConfiguration();
+        yamlConfiguration.set("items.single","MAGMA_CREAM");
+        yamlConfiguration.set("items.multi","MAGMA_CREAM");
         yamlConfiguration.set("sounds.catchSound","ENTITY_TURTLE_EGG_CRACK");
         yamlConfiguration.set("sounds.releaseSound","BLOCK_BREWING_STAND_BREW");
         yamlConfiguration.set("sounds.noPermissionSound", "ENTITY_VILLAGER_NO");
@@ -151,6 +154,22 @@ public class ConfigHandler {
             return Sound.valueOf(this.configuration.getString("sounds.noPermissionSound"));
         }catch (Exception e){
             Bukkit.getServer().getConsoleSender().sendMessage("§cFangBall -> Configured No-Permission-Sound "+this.configuration.getString("sounds.catchSound")+" doesnt exist.");
+            return null;
+        }
+    }
+    public Material getMaterialSingle(){
+        try{
+            return Material.getMaterial(this.configuration.getString("items.single"));
+        }catch (Exception e){
+            Bukkit.getServer().getConsoleSender().sendMessage("§cFangBall -> Configured Item Material for Single "+this.configuration.getString("items.single")+" doesnt exist.");
+            return null;
+        }
+    }
+    public Material getMaterialMulti(){
+        try{
+            return Material.getMaterial(this.configuration.getString("items.multi"));
+        }catch (Exception e){
+            Bukkit.getServer().getConsoleSender().sendMessage("§cFangBall -> Configured Item Material for Single "+this.configuration.getString("items.multi")+" doesnt exist.");
             return null;
         }
     }
