@@ -25,10 +25,8 @@ public final class FangBall extends JavaPlugin {
     public static IslandPrivilege fangballUsePermission;
     /*
     * TODO
-    *  - Alpha-1.3.2
-    *  - Add Message for sender after command execution if sender != receiver | add message to config.. DONE
-    *  - Create API isFangball(ItemStack), getFangballEntityType(ItemStack), isSingleUsableFangball(ItemStack), isMultiUsableFangball(ItemStack) DONE
-    *  - Allowed mobs permissions fangball.use.mob.* | fangball.use.mob.entitytype DONE
+    *  - Beta-1.4.2
+    *  - Nothing here, take a look left..
     * */
     @Override
     public void onEnable() {
