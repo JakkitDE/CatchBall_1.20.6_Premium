@@ -17,10 +17,13 @@ Java 21+
 1) Permission `fangball.use`
  Description `Allows a player to use a fangball`
 
-2) Permission `fangball.use.world.bypass`
+2) Permission `fangball.use.mob.<entityType>`, `fangball.use.mob.*`
+ Description `Allows a player to use on mobs, specific or all.`
+
+3) Permission `fangball.use.world.bypass`
  Description `Allows a player bypassing world whitelist`
 
-3) Permission `fangball.use.bypass.insideisland`
+4) Permission `fangball.use.bypass.insideisland`
  Description `Allows a player bypassing the rule not to be allowed using fangballs outside an island`
  
 ## Hooks
@@ -71,3 +74,12 @@ and set `enabled` of `SuperiorSkyBlock2`to `true`.
 If you want to decide your players only to be able to use fangballs inside an island, no matter if they are in an allowed world or not, go to
 `/plugins/FangBall/settings.yml` 
 and set `onlyUseOnIslandIfAllowed` of `SuperiorSkyBlock2`to `true`.
+
+## API
+```
+#Boolean <- FangballAPI.isFangball(ItemStack itemStack);
+#Boolean <- FangballAPI.isSingleUsableFangball(ItemStack itemStack);
+#Boolean <- FangballAPI.isMultiUsableFangball(ItemStack itemStack);
+#Boolean <- FangballAPI.isFilled(ItemStack itemStack);
+#EntityType <- FangballAPI.getEntityType(ItemStack itemStack);
+```
