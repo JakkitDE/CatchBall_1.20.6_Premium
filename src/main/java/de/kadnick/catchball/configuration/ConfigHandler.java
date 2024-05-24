@@ -1,4 +1,4 @@
-package de.tomstahlberg.fangball.configuration;
+package de.kadnick.catchball.configuration;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -45,25 +45,25 @@ public class ConfigHandler {
         yamlConfiguration.set("hooks.SuperiorSkyBlock2.enabled",false);
         yamlConfiguration.set("hooks.SuperiorSkyBlock2.onlyUseOnIslandIfAllowed",false);
         List<String> singleEmptyLoreList = new ArrayList<>();
-        singleEmptyLoreList.add("§e* §9This is an empty single usable fangball.");
+        singleEmptyLoreList.add("§e* §9This is an empty single usable catchball.");
         List<String> singleFilledLoreList = new ArrayList<>();
-        singleFilledLoreList.add("§e* §9This is a filled single usable fangball.");
+        singleFilledLoreList.add("§e* §9This is a filled single usable catchball.");
         singleFilledLoreList.add("§e* §2Type §e>> §a%type%");
         singleFilledLoreList.add("§e* §2Nickname §e>> §a%nick%");
         List<String> multiEmptyLoreList = new ArrayList<>();
-        multiEmptyLoreList.add("§e* §9This is an empty multi usable fangball.");
+        multiEmptyLoreList.add("§e* §9This is an empty multi usable catchball.");
         List<String> multiFilledLoreList = new ArrayList<>();
-        multiFilledLoreList.add("§e* §9This is a filled multi usable fangball.");
+        multiFilledLoreList.add("§e* §9This is a filled multi usable catchball.");
         multiFilledLoreList.add("§e* §2Type §e>> §a%type%");
         multiFilledLoreList.add("§e* §2Nickname §e>> §a%nick%");
         yamlConfiguration.set("lore.singleEmpty", singleEmptyLoreList);
         yamlConfiguration.set("lore.singleFilled", singleFilledLoreList);
         yamlConfiguration.set("lore.multiEmpty", multiEmptyLoreList);
         yamlConfiguration.set("lore.multiFilled", multiFilledLoreList);
-        yamlConfiguration.set("name.singleEmpty", "§3FangBall §7(§fSingle§7)");
-        yamlConfiguration.set("name.singleFilled", "§3FangBall §7(§fSingle§7) §7(§8%type%§7)");
-        yamlConfiguration.set("name.multiEmpty", "§3FangBall §7(§5Multi§7)");
-        yamlConfiguration.set("name.multiFilled", "§3FangBall §7(§5Multi§7) §7(§8%type%§7)");
+        yamlConfiguration.set("name.singleEmpty", "§3CatchBall §7(§fSingle§7)");
+        yamlConfiguration.set("name.singleFilled", "§3CatchBall §7(§fSingle§7) §7(§8%type%§7)");
+        yamlConfiguration.set("name.multiEmpty", "§3CatchBall §7(§5Multi§7)");
+        yamlConfiguration.set("name.multiFilled", "§3CatchBall §7(§5Multi§7) §7(§8%type%§7)");
         yamlConfiguration.set("nick.noNick", "§c-");
         yamlConfiguration.set("shining.filledSingle", true);
         yamlConfiguration.set("shining.filledMulti", true);
@@ -82,21 +82,29 @@ public class ConfigHandler {
             return;
         }
         YamlConfiguration yamlConfiguration = new YamlConfiguration();
-        yamlConfiguration.set("prefix","§6§lFang§3§lBall §8x ");
+        yamlConfiguration.set("prefix","§6§lCatch§3§lBall §8x ");
         yamlConfiguration.set("messages.mobCatched","§2You catched a mob.");
         yamlConfiguration.set("messages.playerNotOnline","§7The player §e%player% §7is not online.");
         yamlConfiguration.set("messages.singleName","§fSingle");
         yamlConfiguration.set("messages.multiName","§5Multi");
-        yamlConfiguration.set("messages.receivedSingle","§2You have received §e%amount% §2x §f%type% §2fangballs.");
-        yamlConfiguration.set("messages.receivedMulti","§2You have received §e%amount% §2x §5%type% §2fangballs.");
-        yamlConfiguration.set("messages.sent","§2Fangballs §7(§e%amount% §7x §e%type%§7) §2successfully have been sent to §e%player%§2.");
+        yamlConfiguration.set("messages.receivedSingle","§2You have received §e%amount% §2x §f%type% §2catchballs.");
+        yamlConfiguration.set("messages.receivedMulti","§2You have received §e%amount% §2x §5%type% §2catchballs.");
+        yamlConfiguration.set("messages.sent","§2Catchballs §7(§e%amount% §7x §e%type%§7) §2successfully have been sent to §e%player%§2.");
         yamlConfiguration.set("messages.mobReleased","§2You released a mob.");
-        yamlConfiguration.set("messages.alreadyHasMob","§7This fangball already has a mob.");
-        yamlConfiguration.set("messages.notInsideIsland","§7You are not allowed to use fangballs outside of an island.");
-        yamlConfiguration.set("messages.notInAllowedWorld","§7You are not allowed to use fangballs in this world.");
-        yamlConfiguration.set("messages.noPermissionOnIsland","§7You are not allowed to use fangballs on this island.");
-        yamlConfiguration.set("messages.noPermission","§7You are not allowed to use fangballs.");
-        yamlConfiguration.set("messages.noPermissionEntity","§7You are not allowed to use fangballs of type %type%.");
+        yamlConfiguration.set("messages.alreadyHasMob","§7This catchball already has a mob.");
+        yamlConfiguration.set("messages.notInsideIsland","§7You are not allowed to use catchballs outside of an island.");
+        yamlConfiguration.set("messages.notInAllowedWorld","§7You are not allowed to use catchballs in this world.");
+        yamlConfiguration.set("messages.noPermissionOnIsland","§7You are not allowed to use catchballs on this island.");
+        yamlConfiguration.set("messages.noPermission","§7You are not allowed to use catchballs.");
+        yamlConfiguration.set("messages.noPermissionEntity","§7You are not allowed to use catchballs of type %type%.");
+        List<String> helpList = new ArrayList<>();
+        helpList.add("§c-------------------------");
+        helpList.add("§2  Catchball      Info");
+        helpList.add("§3/catchball give <player> <single|multi> <amount>");
+        helpList.add("§c-------------------------");
+        yamlConfiguration.set("messages.helpList",helpList);
+        yamlConfiguration.set("messages.wrongSyntax","§7Wrong syntax! Type §e/catchball help §7for help..");
+
         this.language = yamlConfiguration;
         yamlConfiguration.save(this.languageFile);
     }
@@ -137,7 +145,7 @@ public class ConfigHandler {
         try {
             return Sound.valueOf(this.configuration.getString("sounds.catchSound"));
         }catch (Exception e){
-            Bukkit.getServer().getConsoleSender().sendMessage("§cFangBall -> Configured Catch-Sound "+this.configuration.getString("sounds.catchSound")+" doesnt exist.");
+            Bukkit.getServer().getConsoleSender().sendMessage("§cCatchBall -> Configured Catch-Sound "+this.configuration.getString("sounds.catchSound")+" doesnt exist.");
             return null;
         }
     }
@@ -145,7 +153,7 @@ public class ConfigHandler {
         try {
             return Sound.valueOf(this.configuration.getString("sounds.releaseSound"));
         }catch (Exception e){
-            Bukkit.getServer().getConsoleSender().sendMessage("§cFangBall -> Configured Release-Sound "+this.configuration.getString("sounds.releaseSound")+" doesnt exist.");
+            Bukkit.getServer().getConsoleSender().sendMessage("§cCatchBall -> Configured Release-Sound "+this.configuration.getString("sounds.releaseSound")+" doesnt exist.");
             return null;
         }
     }
@@ -153,7 +161,7 @@ public class ConfigHandler {
         try {
             return Sound.valueOf(this.configuration.getString("sounds.noPermissionSound"));
         }catch (Exception e){
-            Bukkit.getServer().getConsoleSender().sendMessage("§cFangBall -> Configured No-Permission-Sound "+this.configuration.getString("sounds.catchSound")+" doesnt exist.");
+            Bukkit.getServer().getConsoleSender().sendMessage("§cCatchBall -> Configured No-Permission-Sound "+this.configuration.getString("sounds.catchSound")+" doesnt exist.");
             return null;
         }
     }
@@ -161,7 +169,7 @@ public class ConfigHandler {
         try{
             return Material.getMaterial(this.configuration.getString("items.single"));
         }catch (Exception e){
-            Bukkit.getServer().getConsoleSender().sendMessage("§cFangBall -> Configured Item Material for Single "+this.configuration.getString("items.single")+" doesnt exist.");
+            Bukkit.getServer().getConsoleSender().sendMessage("§cCatchBall -> Configured Item Material for Single "+this.configuration.getString("items.single")+" doesnt exist.");
             return null;
         }
     }
@@ -169,7 +177,7 @@ public class ConfigHandler {
         try{
             return Material.getMaterial(this.configuration.getString("items.multi"));
         }catch (Exception e){
-            Bukkit.getServer().getConsoleSender().sendMessage("§cFangBall -> Configured Item Material for Single "+this.configuration.getString("items.multi")+" doesnt exist.");
+            Bukkit.getServer().getConsoleSender().sendMessage("§cCatchBall -> Configured Item Material for Single "+this.configuration.getString("items.multi")+" doesnt exist.");
             return null;
         }
     }
@@ -236,6 +244,12 @@ public class ConfigHandler {
         message = message.replace("%amount%", amount.toString());
         message = message.replace("%type%", type);
         return message;
+    }
+    public List<String> getHelpListMessage(){
+        return language.getStringList("messages.helpList");
+    }
+    public String getWrongSyntaxMessage(){
+        return this.language.getString("prefix")+this.language.getString("messages.wrongSyntax");
     }
     public String getSingleName(){
         return this.language.getString("messages.singleName");

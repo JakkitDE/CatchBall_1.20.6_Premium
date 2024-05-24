@@ -1,4 +1,4 @@
-package de.tomstahlberg.fangball.utils;
+package de.kadnick.catchball.utils;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;

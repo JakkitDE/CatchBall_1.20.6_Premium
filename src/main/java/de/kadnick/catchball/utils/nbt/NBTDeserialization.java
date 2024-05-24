@@ -1,4 +1,4 @@
-package de.tomstahlberg.fangball.utils.nbt;
+package de.kadnick.catchball.utils.nbt;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;

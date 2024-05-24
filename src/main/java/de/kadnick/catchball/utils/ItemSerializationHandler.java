@@ -1,4 +1,4 @@
-package de.tomstahlberg.fangball.utils;
+package de.kadnick.catchball.utils;
 
 import org.bukkit.inventory.ItemStack;
 

@@ -1,8 +1,7 @@
-package de.tomstahlberg.fangball.commands;
+package de.kadnick.catchball.commands;
 
-import de.tomstahlberg.fangball.FangBall;
-import de.tomstahlberg.fangball.configuration.ConfigHandler;
-import de.tomstahlberg.fangball.utils.CleanMobEggHandler;
+import de.kadnick.catchball.CatchBall;
+import de.kadnick.catchball.utils.CleanMobEggHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,15 +12,15 @@ import org.jetbrains.annotations.NotNull;
 public class CommandsMain implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
-        //fangball give <player> <einweg|mehrweg> <anzahl>
+        //catchball give <player> <einweg|mehrweg> <anzahl>
         //          1       2           3           4
         //          0       1           2           3
-        if(commandSender.hasPermission("fangball.admin.command.give") || commandSender.isOp()){
+        if(commandSender.hasPermission("catchball.admin.command.give") || commandSender.isOp()){
             if(strings.length == 4){
                 if(strings[0].equalsIgnoreCase("give")){
 
                     if(Bukkit.getPlayer(strings[1]) == null){
-                        commandSender.sendMessage(FangBall.configHandler.getPlayerNotOnlineMessage(strings[1]));
+                        commandSender.sendMessage(CatchBall.configHandler.getPlayerNotOnlineMessage(strings[1]));
                         return true;
                     }
                     Player player = Bukkit.getPlayer(strings[1]);
@@ -30,25 +29,30 @@ public class CommandsMain implements CommandExecutor {
                         for(int i = 0;i<amount;i++){
                             player.getInventory().addItem(CleanMobEggHandler.getSingleMobEggItem(1));
                         }
-                        player.sendMessage(FangBall.configHandler.getReceivedSingleMessage(FangBall.configHandler.getSingleName(),amount));
+                        player.sendMessage(CatchBall.configHandler.getReceivedSingleMessage(CatchBall.configHandler.getSingleName(),amount));
                         if(Bukkit.getPlayer(strings[1]) != commandSender){
-                            commandSender.sendMessage(FangBall.configHandler.getSentMessage(Bukkit.getPlayer(strings[1]), amount, FangBall.configHandler.getSingleName()));
+                            commandSender.sendMessage(CatchBall.configHandler.getSentMessage(Bukkit.getPlayer(strings[1]), amount, CatchBall.configHandler.getSingleName()));
                         }
                     }else if(strings[2].equalsIgnoreCase("multi")){
                         for(int i = 0;i<amount;i++){
                             player.getInventory().addItem(CleanMobEggHandler.getMultiMobEggItem(1));
                         }
-                        player.sendMessage(FangBall.configHandler.getReceivedMultiMessage(FangBall.configHandler.getMultiName(),amount));
+                        player.sendMessage(CatchBall.configHandler.getReceivedMultiMessage(CatchBall.configHandler.getMultiName(),amount));
                         if(Bukkit.getPlayer(strings[1]) != commandSender){
-                            commandSender.sendMessage(FangBall.configHandler.getSentMessage(Bukkit.getPlayer(strings[1]), amount, FangBall.configHandler.getMultiName()));
+                            commandSender.sendMessage(CatchBall.configHandler.getSentMessage(Bukkit.getPlayer(strings[1]), amount, CatchBall.configHandler.getMultiName()));
                         }
                     }else{
-                        commandSender.sendMessage("§6§lGolden§3§lSky §8x §cFalsches Syntax!");
-                        showHelp(player);
+                        commandSender.sendMessage(CatchBall.configHandler.getWrongSyntaxMessage());
                     }
+                }else if (strings[0].equalsIgnoreCase("help")){
+                    showHelp(commandSender);
+                }else{
+                    commandSender.sendMessage(CatchBall.configHandler.getWrongSyntaxMessage());
                 }
-            }else{
+            }else if(strings.length == 1 && strings[0].equalsIgnoreCase("help")){
                 showHelp(commandSender);
+            }else{
+                commandSender.sendMessage(CatchBall.configHandler.getWrongSyntaxMessage());
             }
         }
 
@@ -57,9 +61,8 @@ public class CommandsMain implements CommandExecutor {
     }
 
     private void showHelp(CommandSender sender){
-        sender.sendMessage("§c-------------------------");
-        sender.sendMessage("§2  Fangball      Info");
-        sender.sendMessage("§3/fangball give <player> <single|multi> <amount>");
-        sender.sendMessage("§c-------------------------");
+        for(String message : CatchBall.configHandler.getHelpListMessage()){
+            sender.sendMessage(message);
+        }
     }
 }

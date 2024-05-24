@@ -1,7 +1,7 @@
-package de.tomstahlberg.fangball.utils;
+package de.kadnick.catchball.utils;
 
-import de.tomstahlberg.fangball.utils.nbt.NBTDeserialization;
-import de.tomstahlberg.fangball.utils.nbt.NBTSerialization;
+import de.kadnick.catchball.utils.nbt.NBTDeserialization;
+import de.kadnick.catchball.utils.nbt.NBTSerialization;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import org.bukkit.Bukkit;
@@ -53,7 +53,7 @@ public class JsonHandler {
             JSONObject jsonObject = new JSONObject(jsonString);
             return jsonObject;
         }catch (JSONException err){
-            Bukkit.getServer().getConsoleSender().sendMessage("§cFehler§7: §eParseException beim Parsen des JSON-Strings.");
+            Bukkit.getServer().getConsoleSender().sendMessage("§cError§7: §eParseException while trying to parse JSON-Strings.");
             Bukkit.getServer().getConsoleSender().sendMessage(err.getMessage());
             return null;
         }

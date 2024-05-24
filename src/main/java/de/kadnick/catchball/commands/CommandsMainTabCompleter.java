@@ -1,4 +1,4 @@
-package de.tomstahlberg.fangball.commands;
+package de.kadnick.catchball.commands;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -15,10 +15,11 @@ public class CommandsMainTabCompleter implements TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         List<String> list = new ArrayList<>();
-        if(commandSender.hasPermission("fangball.admin.command.give") || commandSender.isOp()){
+        if(commandSender.hasPermission("catchball.admin.command.give") || commandSender.isOp()){
             switch (strings.length){
                 case 1:
                     list.add("give");
+                    list.add("help");
                     break;
                 case 2:
                     for(Player player : Bukkit.getOnlinePlayers()){
